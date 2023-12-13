@@ -115,7 +115,7 @@ DROP TABLE IF EXISTS `kkn_master_tahap`;
 CREATE TABLE `kkn_master_tahap` (
   `kode_kkn_tahap` int(11) NOT NULL AUTO_INCREMENT,
   `jenis_kkn` varchar(20) DEFAULT NULL,
-  `kode_tahapan` int(11) DEFAULT NULL,
+  `kode_semester` int(11) DEFAULT NULL,
   `waktu_pembukaan` datetime DEFAULT NULL,
   `waktu_penutupan` datetime DEFAULT NULL,
   `status_aktif` varchar(1) DEFAULT NULL,
@@ -171,26 +171,16 @@ CREATE TABLE `master_semester` (
   `kode_semester` int(11) NOT NULL AUTO_INCREMENT,
   `semester_akademik` varchar(10) DEFAULT NULL,
   `semester` varchar(7) DEFAULT NULL,
-  `tahun_akademik` varchar(4) DEFAULT NULL,
+  `tahun_akademik` varchar(10) DEFAULT NULL,
   `status_aktif` varchar(1) DEFAULT NULL,
   PRIMARY KEY (`kode_semester`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `master_semester` */
 
-/*Table structure for table `master_tahapan` */
-
-DROP TABLE IF EXISTS `master_tahapan`;
-
-CREATE TABLE `master_tahapan` (
-  `kode_tahapan` int(11) NOT NULL AUTO_INCREMENT,
-  `kode_semester` int(11) DEFAULT NULL,
-  `tahap_ke` varchar(1) DEFAULT NULL,
-  `status_aktif` varchar(1) DEFAULT NULL,
-  PRIMARY KEY (`kode_tahapan`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-/*Data for the table `master_tahapan` */
+insert  into `master_semester`(`kode_semester`,`semester_akademik`,`semester`,`tahun_akademik`,`status_aktif`) values 
+(1,'20231','Ganjil','2023/2024','1'),
+(2,'20232','Genap','2023/2024','0');
 
 /*Table structure for table `master_user` */
 
@@ -203,9 +193,13 @@ CREATE TABLE `master_user` (
   `password` varchar(60) DEFAULT NULL,
   `status_aktif` varchar(1) DEFAULT NULL,
   PRIMARY KEY (`kode_user`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `master_user` */
+
+insert  into `master_user`(`kode_user`,`nama`,`email`,`password`,`status_aktif`) values 
+(1,'Robi Dinnoor','robidinnoor@uin-antasari.ac.id','$2y$10$kDy1YbsHbx5CacN35zpsZuHA3nRc46pOhfAouqj8U4KrSr7bByWv.','0'),
+(2,'MUHAMMAD ROBI DINNOOR','robidinnoor1992@gmail.com','$2y$10$Dr8AQMQMjuDK.u29bexOnuNHC8WBTYckuONPRqPwgLBKxReC9wqki','1');
 
 /*Table structure for table `tkk_daftar` */
 
@@ -233,7 +227,7 @@ DROP TABLE IF EXISTS `tkk_master_tahap`;
 
 CREATE TABLE `tkk_master_tahap` (
   `kode_tkk_tahap` int(11) NOT NULL AUTO_INCREMENT,
-  `kode_tahapan` int(11) DEFAULT NULL,
+  `kode_semester` int(11) DEFAULT NULL,
   `waktu_pembukaan` datetime DEFAULT NULL,
   `waktu_penutupan` datetime DEFAULT NULL,
   `status_aktif` varchar(1) DEFAULT NULL,

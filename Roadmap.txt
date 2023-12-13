@@ -1,7 +1,7 @@
 A. Fase 1 (Membuat Login untuk user dan mahasiswa)
    1. membuat view Login ✅ - membuat controller untuk login ⛔
-   2. membuat view sementara dashboard untuk admin ⛔
-   3. membuat MVC inputan settingan untuk master user ⛔
+   2. membuat view "SEMENTARA" dashboard untuk admin ⛔
+   3. membuat MVC inputan settingan untuk master user ✅
    4. membuat MVC inputan master semester_akademik ⛔
    5. membuat MVC inputan master tahapan ⛔
    6. membuat MVC inputan master tkk tahap ⛔
