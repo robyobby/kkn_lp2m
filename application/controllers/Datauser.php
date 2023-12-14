@@ -14,7 +14,7 @@ class Datauser extends CI_Controller
   public function index()
   {
     $data['row'] = $this->M_user->ambil_datauser();
-    $this->template->load('templates/View_template', 'user/View_user', $data);
+    $this->template->load('templates/View_template', 'master/View_user', $data);
   }
 
   public function edit_user()
@@ -30,6 +30,7 @@ class Datauser extends CI_Controller
     ));
     $this->form_validation->set_rules('password', 'Password', 'required');
     $this->form_validation->set_rules('password2', 'Konfirmasi Password', 'required|matches[password]');
+    $this->form_validation->set_error_delimiters('<small><span class="help-block">', '</span></small>');
 
     if ($this->form_validation->run() == FALSE) {
       $this->session->set_flashdata('warning', 'Ada Kesalahan Dalam Mengisi !');

@@ -14,7 +14,7 @@ class Dataperiode extends CI_Controller
    public function index()
    {
       $data['row'] = $this->M_periode->ambil_dataperiode();
-      $this->template->load('templates/View_template', 'periode/View_periode', $data);
+      $this->template->load('templates/View_template', 'master/View_periode', $data);
    }
 
    public function ubah_status_aktif($kode_semester)
@@ -35,4 +35,43 @@ class Dataperiode extends CI_Controller
       }
       redirect('Dataperiode');
    }
+
+   public function tambah_periode()
+   {
+      $post = $this->input->post(null, TRUE);
+
+         $post = $this->input->post(null, TRUE);
+         $post['status_aktif'] = 0;
+         $this->M_periode->tambah_periode($post);
+         if ($this->db->affected_rows() > 0) {
+            $this->session->set_flashdata('success', 'Data Berhasil Diubah !');
+         }
+         redirect('Dataperiode');
+      
+      }
+
+   public function edit_periode()
+   {
+      $post = $this->input->post(null, TRUE);
+      $this->form_validation->set_rules('kode_semester', 'Kode Semester', 'required');
+      $this->form_validation->set_rules('semester', 'Semester', 'required');
+      $this->form_validation->set_rules('tahun_akademik', 'Tahun Akademik', 'required');
+      $this->form_validation->set_rules('status_aktif', 'Status Aktif', 'required');
+      $this->form_validation->set_rules('kode_semester', 'Kode Semester', 'required');
+
+      // $this->form_validation->set_error_delimiters('<small><span class="help-block">', '</span></small>');
+      
+      if ($this->form_validation->run() == FALSE) {
+         $this->session->set_flashdata('warning', 'Ada Kesalahan Dalam Mengisi !');
+         redirect('Dataperiode');
+      } else {
+         $post = $this->input->post(null, TRUE);
+         $this->M_periode->edit($post);
+         if ($this->db->affected_rows() > 0) {
+         $this->session->set_flashdata('success', 'Data Berhasil Diubah !');
+      }
+         redirect('Dataperiode');
+      }
+   }
+
 }

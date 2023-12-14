@@ -28,7 +28,6 @@
    <link href="<?= base_url() ?>assets/vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet" />
    <!-- bootstrap-daterangepicker -->
    <link href="<?= base_url() ?>assets/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
-
    <!-- Custom Theme Style -->
    <link href="<?= base_url() ?>assets/build/css/custom.min.css" rel="stylesheet">
 </head>
@@ -58,7 +57,12 @@
                            <ul class="nav child_menu">
                               <li><a href="<?= base_url('Datauser') ?>"><i class="fa fa-user"></i> User <span class="fa fa-chevron"></span></a>
                               <li><a href="<?= base_url('Dataperiode') ?>"><i class="fa fa-calendar"></i> Periode <span class="fa fa-chevron"></span></a>
-                              <li><a href="<?= base_url('Datakkntahap') ?>"><i class="fa fa-calendar-o"></i> Tahapan KKN <span class="fa fa-chevron"></span></a>
+                              <li><a><i class="fa fa-calendar-o"></i> Data Tahapan <span class="fa fa-chevron-down"></span></a>
+                                 <ul class="nav child_menu">
+                                    <li><a href="<?= base_url('Datatkkperiode') ?>"><i class="fa fa-calendar-o"></i> Periode TKK <span class="fa fa-chevron"></span></a>
+                                    <li><a href="<?= base_url('Datakknperiode') ?>"><i class="fa fa-calendar-o"></i> Periode KKN <span class="fa fa-chevron"></span></a>
+                                 </ul>
+                              </li>
                            </ul>
                         </li>
                      </ul>
@@ -148,7 +152,8 @@
    <!-- bootstrap-daterangepicker -->
    <script src="<?= base_url() ?>assets/vendors/moment/min/moment.min.js"></script>
    <script src="<?= base_url() ?>assets/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
-
+   <!-- jquery.inputmask -->
+   <script src="<?= base_url() ?>assets/vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
    <!-- Sweetalert -->
    <script src="<?= base_url() ?>assets/build/js/modules-sweetalert.js"></script>
    <script src="<?= base_url() ?>assets/vendors/sweetalert/dist/sweetalert.min.js"></script>
@@ -279,6 +284,23 @@
             $('#edituser #nama').val(nama);
             $('#edituser #email').val(email);
             $('#edituser #status_aktif').val(status_aktif);
+         })
+      })
+   </script>
+
+   <script>
+      $(document).ready(function() {
+         $(document).on('click', '#tomboleditperiode', function() {
+            var kode_semester = $(this).data('kode_semester');
+            var semester_akademik = $(this).data('semester_akademik');
+            var semester = $(this).data('semester');
+            var tahun_akademik = $(this).data('tahun_akademik');
+            var status_aktif = $(this).data('status_aktif');
+            $('#editperiode #kode_semester').val(kode_semester);
+            $('#editperiode #semester_akademik').val(semester_akademik);
+            $('#editperiode #semester').val(semester);
+            $('#editperiode #tahun_akademik').val(tahun_akademik);
+            $('#editperiode #status_aktif').val(status_aktif);
          })
       })
    </script>

@@ -67,31 +67,32 @@
                         <div class="clearfix"></div>
                      </div>
                      <div class="x_content">
-                        <form class="form-horizontal form-label-left" action="<?= site_url('Datauser/tambah_user') ?>" method="POST">
+                        <form class="form-horizontal form-label-left" action="<?= site_url('Dataperiode/tambah_periode') ?>" method="POST">
                            <div class="item form-group">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Nama *</span>
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Kode Semester *</span>
                               </label>
                               <div class="col-md-6 col-sm-6 col-xs-12">
-                                 <input id="nama" class="form-control col-md-7 col-xs-12" name="nama" placeholder="nama lengkap" required type="text">
+                                 <input id="semester_akademik" class="form-control col-md-7 col-xs-12" name="semester_akademik" placeholder="semester_akademik" required type="text" data-inputmask="'mask': '99999'">
+                                 <?= form_error('semester_akademik', '<div class="alert alert-danger" role="alert">
+				                     Password salah !', '</div>'); ?>
                               </div>
                            </div>
                            <div class="item form-group">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Email *</span>
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Semester *</span>
                               </label>
                               <div class="col-md-6 col-sm-6 col-xs-12">
-                                 <input type="email" id="email" name="email" required class="form-control col-md-7 col-xs-12">
-                              </div>
+                                 <select class="form-control" name="semester" id="semester">
+                                    <option>-Pilih Semester-</option>
+                                    <option value="Ganjil" <?= set_value('semester') == "Ganjil" ? "selected" : null ?>>Ganjil</option>
+                                    <option value="Genap" <?= set_value('semester') == "Genap" ? "selected" : null ?>>Genap</option>
+                                 </select>
+                              </div>   
                            </div>
                            <div class="item form-group">
-                              <label for="password" class="control-label col-md-3">Password</label>
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Tahun Akademik *</span>
+                              </label>
                               <div class="col-md-6 col-sm-6 col-xs-12">
-                                 <input id="password1" type="password" name="password1" class="form-control col-md-7 col-xs-12" required="required">
-                              </div>
-                           </div>
-                           <div class="item form-group">
-                              <label for="password2" class="control-label col-md-3 col-sm-3 col-xs-12">Konfirmasi Password</label>
-                              <div class="col-md-6 col-sm-6 col-xs-12">
-                                 <input id="password3" type="password" name="password3" class="form-control col-md-7 col-xs-12" required="required">
+                                 <input id="tahun_akademik" class="form-control col-md-7 col-xs-12" name="tahun_akademik" placeholder="tahun_akademik" required type="text" data-inputmask="'mask': '9999/9999'">
                               </div>
                            </div>
                            <div class="ln_solid"></div>
@@ -142,7 +143,7 @@
                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="tahun_akademik" placeholder="tahun_akademik">Tahun Akademik <span class="required">*</span>
                      </label>
                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input type="text" id="tahun_akademik" name="tahun_akademik" class="form-control col-md-7 col-xs-12">
+                        <input type="text" id="tahun_akademik" name="tahun_akademik" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '9999/9999'">
                         <input type="hidden" id="kode_semester" name="kode_semester" required>
                         <input type="hidden" id="status_aktif" name="status_aktif" required>
                      </div>
