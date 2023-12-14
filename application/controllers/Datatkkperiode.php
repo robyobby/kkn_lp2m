@@ -14,7 +14,7 @@ class Datatkkperiode extends CI_Controller
    public function index()
    {
       $data['row'] = $this->M_tkkperiode->ambil_datatkkperiode();
-      $this->template->load('templates/View_template', 'periode/View_tkkperiode', $data);
+      $this->template->load('templates/View_template', 'master/View_tkkperiode', $data);
    }
 
    public function ubah_status_aktif($kode_tkk_tahap)

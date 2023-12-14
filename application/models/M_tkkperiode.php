@@ -7,7 +7,7 @@ class M_tkkperiode extends CI_Model
    public function ambil_datatkkperiode()
    {
       $this->db->select('*');
-      $this->db->From('view_master_tkk_tahap');
+      $this->db->From('view_tkk_master_tahap');
       $query = $this->db->get();
       return $query;
    }

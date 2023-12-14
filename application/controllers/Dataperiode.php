@@ -53,16 +53,25 @@ class Dataperiode extends CI_Controller
    public function edit_periode()
    {
       $post = $this->input->post(null, TRUE);
-      $this->form_validation->set_rules('kode_semester', 'Kode Semester', 'required');
-      $this->form_validation->set_rules('semester', 'Semester', 'required');
-      $this->form_validation->set_rules('tahun_akademik', 'Tahun Akademik', 'required');
-      $this->form_validation->set_rules('status_aktif', 'Status Aktif', 'required');
-      $this->form_validation->set_rules('kode_semester', 'Kode Semester', 'required');
+      $this->form_validation->set_rules('kode_semester', 'Kode Semester', 'required', array(
+      'required' => 'Kode Semester tidak boleh kosong'
+      ));
+      $this->form_validation->set_rules('semester', 'Semester', 'required', array(
+      'required' => 'Semester tidak boleh kosong'
+      ));
+      $this->form_validation->set_rules('tahun_akademik', 'Tahun Akademik', 'required', array(
+      'required' => 'Tahun Akademik tidak boleh kosong'
+      ));
+      $this->form_validation->set_rules('status_aktif', 'Status Aktif', 'required', array(
+      'required' => 'Status Aktif tidak boleh kosong'
+      ));
+      $this->form_validation->set_rules('kode_semester', 'Kode Semester', 'required', array(
+      'required' => 'Kode Semester tidak boleh kosong'
+      ));
 
       // $this->form_validation->set_error_delimiters('<small><span class="help-block">', '</span></small>');
       
       if ($this->form_validation->run() == FALSE) {
-         $this->session->set_flashdata('warning', 'Ada Kesalahan Dalam Mengisi !');
          redirect('Dataperiode');
       } else {
          $post = $this->input->post(null, TRUE);

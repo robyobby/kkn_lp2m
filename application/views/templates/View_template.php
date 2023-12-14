@@ -305,6 +305,27 @@
       })
    </script>
 
+<!-- <script>
+   $(document).ready(function () {
+        // Inisialisasi modal
+      $('#modal-editperiode').modal('hide');
+        // Menggunakan Ajax untuk mengirim formulir ke server
+      $('#submitBtn').click(function () {
+            var formData = $('#myForm').serialize();
+            $.ajax({
+               type: 'POST',
+               url: '<?= site_url('Dataperiode/edit_periode') ?>',
+               data: formData,
+               success: function (response) {
+                   // Tampilkan pesan atau lakukan tindakan sesuai respons dari server
+                  alert(response);
+               }
+            });
+      });
+   });
+</script> -->
+
+
 </body>
 
 </html>

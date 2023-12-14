@@ -63,7 +63,7 @@
                <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
                   <div class="x_panel">
                      <div class="x_title">
-                        <h2>Tambah Data Periode <small>Administrator</small></h2>
+                        <h2>Tambah Data Periode <small>Administrator</small></h2> <?= $this->session->flashdata('pesan'); ?> <?= form_error('semester_akademik') ?>
                         <div class="clearfix"></div>
                      </div>
                      <div class="x_content">
@@ -121,23 +121,24 @@
          </div>
          <div class="modal-body" id="editperiode">
             <div class="x_title">
-               <h2>Tambah Data Periode <small>Administrator</small></h2>
+               <h2>Edit Data Periode <small>Administrator</small></h2>
                <div class="clearfix"></div>
             </div>
             <div class="x_content form-horizontal form-label-left">
                <form action="<?= site_url('Dataperiode/edit_periode') ?>" method="POST">
+               <!-- <form id="myForm"> -->
                   <div class="item form-group">
                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="semester_akademik" placeholder="semester_akademik">Kode Semester <span class="required">*</span>
                      </label>
                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input type="text" id="semester_akademik" name="semester_akademik" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '99999'">
+                        <input type="text" id="semester_akademik" name="semester_akademik" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '99999'" required>
                      </div>
                   </div>
                   <div class="item form-group">
                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Semester <span class="required">*</span>
                      </label>
                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        <select class="form-control" name="semeter" id="semester">
+                        <select class="form-control" name="semester" id="semester" required>
                            <option>-Pilih Semester-</option>
                            <option value="Ganjil">Ganjil</option>
                            <option value="Genap">Genap</option>
@@ -157,7 +158,7 @@
             </div>
             <div class="modal-footer">
                <button type="button" class="btn btn-default" data-dismiss="modal">TUTUP</button>
-               <button type="submit" class="btn btn-primary">UBAH</button>
+               <button id="submitBtn" class="btn btn-primary">UBAH</button>
             </div>
             </form>
          </div>

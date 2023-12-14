@@ -6,9 +6,11 @@
          <div class="x_panel">
             <div class="clearfix"></div>
             <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
-               <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Periode</a>
+               <li role="presentation" class="active"><a href="#tab_content1" id="tahapan-tab" role="tab" data-toggle="tab" aria-expanded="true">Tahapan TKK</a>
                </li>
-               <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Tambah Periode</a>
+               <li role="presentation" class=""><a href="#tab_content2" role="tab" id="tambahtahaptkk-tab" data-toggle="tab" aria-expanded="false">Tambah Data</a>
+               </li>
+               <li role="presentation" class=""><a href="#tab_content3" role="tab" id="historitkk-tab" data-toggle="tab" aria-expanded="false">Riwayat Data</a>
                </li>
             </ul>
             <div id="myTabContent" class="tab-content">
