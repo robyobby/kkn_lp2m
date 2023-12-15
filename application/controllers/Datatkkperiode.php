@@ -13,25 +13,37 @@ class Datatkkperiode extends CI_Controller
 
    public function index()
    {
-      $data['row'] = $this->M_tkkperiode->ambil_datatkkperiode();
+      $data['tkkrow'] = $this->M_tkkperiode->ambil_datatkkperiode();
       $this->template->load('templates/View_template', 'master/View_tkkperiode', $data);
    }
 
    public function ubah_status_aktif($kode_tkk_tahap)
    {
-      $this->db->query("UPDATE tkk_master_tahap SET `status_aktif`= 0");
-      $this->db->query("UPDATE tkk_master_tahap SET `status_aktif`= 1 WHERE kode_tkk_tahap = $kode_tkk_tahap");
-      if ($this->db->affected_rows() > 0) {
-         $this->session->set_flashdata('success', 'Data Berhasil Diaktifkan!');
+      $query = $this->db->query("SELECT * FROM view_tkk_master_tahap WHERE kode_tkk_tahap = $kode_tkk_tahap");
+      $data = $query->row();
+      if ($data->status_aktif_semester == 0) {
+         $this->session->set_flashdata('warning', 'Maaf untuk mengaktivasi Tahapan, aktifkan dulu Periode Semester !');
+      } else {
+         $this->db->query("UPDATE tkk_master_tahap SET `status_aktif`= 0");
+         $this->db->query("UPDATE tkk_master_tahap SET `status_aktif`= 1 WHERE kode_tkk_tahap = $kode_tkk_tahap");
+         if ($this->db->affected_rows() > 0) {
+            $this->session->set_flashdata('success', 'Data Berhasil Diaktifkan!');
+         }
       }
       redirect('Datatkkperiode');
    }
 
    public function ubah_status_nonaktif($kode_tkk_tahap)
    {
-      $this->db->query("UPDATE master_semester SET `status_aktif`= 0 WHERE kode_tkk_tahap = $kode_tkk_tahap");
-      if ($this->db->affected_rows() > 0) {
-         $this->session->set_flashdata('success', 'Data Berhasil Dinonaktifkan!');
+      $query = $this->db->query("SELECT * FROM view_tkk_master_tahap WHERE kode_tkk_tahap = $kode_tkk_tahap");
+      $data = $query->row();
+      if ($data->status_aktif_semester == 0) {
+         $this->session->set_flashdata('warning', 'Maaf untuk mengaktivasi Tahapan, aktifkan dulu Periode Semester !');
+      } else {
+         $this->db->query("UPDATE tkk_master_tahap SET `status_aktif`= 0 WHERE kode_tkk_tahap = $kode_tkk_tahap");
+         if ($this->db->affected_rows() > 0) {
+            $this->session->set_flashdata('success', 'Data Berhasil Dinonaktifkan!');
+         }
       }
       redirect('Datatkkperiode');
    }
@@ -40,14 +52,12 @@ class Datatkkperiode extends CI_Controller
    {
       $post = $this->input->post(null, TRUE);
 
-         $post = $this->input->post(null, TRUE);
-         $post['status_aktif'] = 0;
-         $this->M_tkkperiode->tambah_tkkperiode($post);
-         if ($this->db->affected_rows() > 0) {
-            $this->session->set_flashdata('success', 'Data Berhasil Diubah !');
-         }
-         redirect('Datatkkperiode');
-      
+      $post = $this->input->post(null, TRUE);
+      $post['status_aktif'] = 0;
+      $this->M_tkkperiode->tambah_tkkperiode($post);
+      if ($this->db->affected_rows() > 0) {
+         $this->session->set_flashdata('success', 'Data Berhasil Diubah !');
       }
-
+      redirect('Datatkkperiode');
+   }
 }

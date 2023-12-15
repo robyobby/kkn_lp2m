@@ -1,164 +1,220 @@
 <!-- page content -->
 <div class="right_col" role="main">
-   <div class="">
-      <div class="clearfix"></div>
-      <div class="">
-         <div class="x_panel">
-            <div class="clearfix"></div>
-            <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
-               <li role="presentation" class="active"><a href="#tab_content1" id="tahapan-tab" role="tab" data-toggle="tab" aria-expanded="true">Tahapan TKK</a>
-               </li>
-               <li role="presentation" class=""><a href="#tab_content2" role="tab" id="tambahtahaptkk-tab" data-toggle="tab" aria-expanded="false">Tambah Data</a>
-               </li>
-               <li role="presentation" class=""><a href="#tab_content3" role="tab" id="historitkk-tab" data-toggle="tab" aria-expanded="false">Riwayat Data</a>
-               </li>
-            </ul>
-            <div id="myTabContent" class="tab-content">
-               <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
-                  <div class="x_panel">
-                     <div class="x_title">
-                        <h2>Data Periode <small>Administrator</small></h2>
-                        <div class="clearfix"></div>
-                     </div>
-                     <div class="x_content">
-                        <table id="datatable-fixed-header" class="table table-striped table-bordered">
-                           <thead>
-                              <tr>
-                                 <th class="text-center">No</th>
-                                 <th>Kode Semester</th>
-                                 <th>Semester</th>
-                                 <th>Tahun Akademik</th>
-                                 <th>Aksi</th>
-                              </tr>
-                           </thead>
-                           <tbody>
-                              <?php $no = 1;
-                              foreach ($row->result() as $rows => $data) { ?>
-                                 <tr>
-                                    <td class="text-center"> <?= $no++; ?>.</td>
-                                    <td>
-                                       <?= $data->semester_akademik; ?>
-                                       <?php
-                                       if ($data->status_aktif == 1) { ?>
-                                          <div class="label label-success">Aktif</div>
-                                          <a href="<?= site_url('Dataperiode/ubah_status_nonaktif/' . $data->kode_semester) ?>"><input type="checkbox" class="js-switch" checked /></a> Status Aktif
-                                       <?php } else { ?>
-                                          <div class="label label-danger">Non Aktif</div>
-                                          <a href="<?= site_url('Dataperiode/ubah_status_aktif/' . $data->kode_semester) ?>"><input type="checkbox" class="js-switch" /></a> Status Aktif
-                                       <?php } ?>
-                                    </td>
-                                    <td><?= $data->semester; ?></td>
-                                    <td><?= $data->tahun_akademik; ?></td>
-                                    <td>
-                                       <form action="">
-                                          <a class="btn btn-warning btn-xs" id="tomboleditperiode" data-toggle="modal" data-target="#modal-editperiode" data-kode_semester="<?= $data->kode_semester ?>" data-semester_akademik="<?= $data->semester_akademik ?>" data-semester="<?= $data->semester ?>" data-tahun_akademik="<?= $data->tahun_akademik ?>" data-status_aktif="<?= $data->status_aktif ?>"><i class="fa fa-edit"> Edit</i></a>
-                                          <input type="hidden" name="kode_semester" value="<?= $data->kode_semester ?>">
-                                       </form>
-                                    </td>
-                                 </tr>
-                              <?php } ?>
-                           </tbody>
-                        </table>
-                     </div>
-                  </div>
-               </div>
-               <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
-                  <div class="x_panel">
-                     <div class="x_title">
-                        <h2>Tambah Data Periode <small>Administrator</small></h2>
-                        <div class="clearfix"></div>
-                     </div>
-                     <div class="x_content">
-                        <form class="form-horizontal form-label-left" action="<?= site_url('Dataperiode/tambah_periode') ?>" method="POST">
-                           <div class="item form-group">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Kode Semester *</span>
-                              </label>
-                              <div class="col-md-6 col-sm-6 col-xs-12">
-                                 <input id="semester_akademik" class="form-control col-md-7 col-xs-12" name="semester_akademik" placeholder="semester_akademik" required type="text" data-inputmask="'mask': '99999'">
-                                 <?= form_error('semester_akademik', '<div class="alert alert-danger" role="alert">
-				                     Password salah !', '</div>'); ?>
-                              </div>
-                           </div>
-                           <div class="item form-group">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Semester *</span>
-                              </label>
-                              <div class="col-md-6 col-sm-6 col-xs-12">
-                                 <select class="form-control" name="semester" id="semester">
-                                    <option>-Pilih Semester-</option>
-                                    <option value="Ganjil" <?= set_value('semester') == "Ganjil" ? "selected" : null ?>>Ganjil</option>
-                                    <option value="Genap" <?= set_value('semester') == "Genap" ? "selected" : null ?>>Genap</option>
-                                 </select>
-                              </div>   
-                           </div>
-                           <div class="item form-group">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Tahun Akademik *</span>
-                              </label>
-                              <div class="col-md-6 col-sm-6 col-xs-12">
-                                 <input id="tahun_akademik" class="form-control col-md-7 col-xs-12" name="tahun_akademik" placeholder="tahun_akademik" required type="text" data-inputmask="'mask': '9999/9999'">
-                              </div>
-                           </div>
-                           <div class="ln_solid"></div>
-                           <div class="form-group">
-                              <div class="col-md-6 col-md-offset-3">
-                                 <button id="send" type="submit" class="btn btn-success">Submit</button>
-                              </div>
-                           </div>
-                        </form>
-                     </div>
-                  </div>
-               </div>
+  <div class="">
+    <div class="clearfix"></div>
+    <div class="">
+      <div class="x_panel">
+        <div class="clearfix"></div>
+        <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+          <li role="presentation" class="active"><a href="#tab_content1" id="tahapan-tab" role="tab" data-toggle="tab" aria-expanded="true">Tahapan TKK</a>
+          </li>
+          <li role="presentation" class=""><a href="#tab_content2" role="tab" id="tambahtahaptkk-tab" data-toggle="tab" aria-expanded="false">Tambah Data</a>
+          </li>
+          <li role="presentation" class=""><a href="#tab_content3" role="tab" id="historitkk-tab" data-toggle="tab" aria-expanded="false">Riwayat Data</a>
+          </li>
+        </ul>
+        <div id="myTabContent" class="tab-content">
+          <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Data Periode TKK <small>Administrator</small></h2>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+                <table id="datatable-fixed-header" class="table table-striped table-bordered">
+                  <thead>
+                    <tr>
+                      <th class="text-center">No</th>
+                      <th>Tahapan TKK</th>
+                      <th>Waktu Pembukaan</th>
+                      <th>Waktu Penutupan</th>
+                      <th>Periode</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php
+                    $no = 1;
+                    $prev_id = null;
+                    foreach ($tkkrow->result_array() as  $row => $data) { ?>
+                      <?php
+                      if ($prev_id !== $data['kode_semester']) { ?>
+                        <tr>
+                          <td class="text-center"> <?= $no++; ?>.</td>
+                          <td>
+                            Tahap ke - <?= $data['tahap_ke']; ?>
+                            <?php
+                            if ($data['status_aktif_tahapan_tkk'] == 1) { ?>
+                              <div class="label label-success">Aktif</div>
+                              <a href="<?= site_url('Datatkkperiode/ubah_status_nonaktif/' . $data['kode_tkk_tahap']) ?>"><input type="checkbox" class="js-switch" checked /></a> Status Aktif
+                            <?php } else { ?>
+                              <div class="label label-danger">Non Aktif</div>
+                              <a href="<?= site_url('Datatkkperiode/ubah_status_aktif/' . $data['kode_tkk_tahap']) ?>"><input type="checkbox" class="js-switch" /></a> Status Aktif
+                            <?php } ?>
+                          </td>
+                          <td><?= $data['waktu_pembukaan']; ?></td>
+                          <td><?= $data['waktu_penutupan']; ?></td>
+                          <td class="text-center v-center" rowspan="<?= $this->M_tkkperiode->gabungbaris($data['kode_semester']) ?>">
+                            Semester <?= $data['semester']; ?> T.A. <?= $data['tahun_akademik']; ?>
+                            <?php
+                            if ($data['status_aktif_semester'] == 1) { ?>
+                              <div class="label label-success">Aktif</div>
+                            <?php } else { ?>
+                              <div class="label label-danger">Non Aktif</div>
+                            <?php } ?>
+                          </td>
+                          <td>
+                            <form action="">
+                              <a class="btn btn-warning btn-xs" id="tomboledittahapantkk" data-toggle="modal" data-target="#modal-edittahapantkk" data-kode_tkk_tahap="<?= $data['kode_tkk_tahap'] ?>" data-kode_semester="<?= $data['kode_semester'] ?>" data-status_aktif_tahapan_tkk="<?= $data['status_aktif_tahapan_tkk'] ?>" data-waktu_pembukaan="<?= $data['waktu_pembukaan'] ?>" data-waktu_penutupan="<?= $data['waktu_penutupan'] ?>" data-tahap_ke="<?= $data['tahap_ke'] ?>"><i class="fa fa-edit"> Edit</i></a>
+                            </form>
+                          </td>
+                        </tr>
+                      <?php } else { ?>
+                        <tr>
+                          <td class="text-center"> <?= $no++; ?>.</td>
+                          <td>
+                            Tahap ke - <?= $data['tahap_ke']; ?>
+                            <?php
+                            if ($data['status_aktif_tahapan_tkk'] == 1) { ?>
+                              <div class="label label-success">Aktif</div>
+                              <a href="<?= site_url('Datatkkperiode/ubah_status_nonaktif/' . $data['kode_tkk_tahap']) ?>"><input type="checkbox" class="js-switch" checked /></a> Status Aktif
+                            <?php } else { ?>
+                              <div class="label label-danger">Non Aktif</div>
+                              <a href="<?= site_url('Datatkkperiode/ubah_status_aktif/' . $data['kode_tkk_tahap']) ?>"><input type="checkbox" class="js-switch" /></a> Status Aktif
+                            <?php } ?>
+                          </td>
+                          <td><?= $data['waktu_pembukaan']; ?></td>
+                          <td><?= $data['waktu_penutupan']; ?></td>
+                          <td>
+                            <form action="">
+                              <!-- <a class="btn btn-warning btn-xs" id="tomboledittahapantkk" data-toggle="modal" data-target="#modal-edittahapantkk" data-kode_tkk_tahap="<?= $data['kode_tkk_tahap'] ?>" data-kode_semester="<?= $data['kode_semester'] ?>" data-status_aktif_tahapan_tkk="<?= $data['status_aktif_tahapan_tkk'] ?>" data-waktu_pembukaan="<?= $data['waktu_pembukaan'] ?>" data-waktu_penutupan="<?= $data['waktu_penutupan'] ?>" data-tahap_ke="<?= $data['tahap_ke'] ?>"><i class="fa fa-edit"> Edit</i></a> -->
+                            </form>
+                          </td>
+                        </tr>
+                      <?php } ?>
+                      <!-- <?= $prev_id = $data['kode_semester']; ?> -->
+                    <?php } ?>
+                  </tbody>
+                </table>
+              </div>
             </div>
-         </div>
+          </div>
+          <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Tambah Data Periode <small>Administrator</small></h2>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+                <form class="form-horizontal form-label-left" action="<?= site_url('Dataperiode/tambah_periode') ?>" method="POST">
+                  <div class="item form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Semester <span class="required">*</span>
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input type="text" id="semester_ta" name="semester_ta" class="form-control col-md-7 col-xs-12" readonly>
+                      <input type="hidden" id="kode_tkk_tahap" name="kode_tahap_tkk" required>
+                      <input type="hidden" id="kode_semester" name="kode_semester" required>
+                      <input type="hidden" id="status_aktif" name="status_aktif" required>
+                    </div>
+                  </div>
+                  <div class="item form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Tahapan ke - <span class="required">*</span>
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <select class="form-control" name="tahap_ke" id="tahap_ke" required>
+                        <option>-Pilih Tahap TKK-</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="item form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="waktu_pembukaan" placeholder="waktu_pembukaan">Waktu Pembukaan<span class="required">*</span>
+                    </label>
+                    <div class="col-md-3 col-sm-3 col-xs-3">
+                      <input type="date" id="tanggal_pembukaan" name="tanggal_pembukaan" class="form-control col-md-6 col-xs-6" required>
+                    </div>
+                    <div class="col-md-3 col-sm-3 col-xs-3">
+                      <input type="time" id="jam_pembukaan" name="jam_pembukaan" class="form-control col-md-6 col-xs-6" required>
+                    </div>
+                  </div>
+                  <div class="ln_solid"></div>
+                  <div class="form-group">
+                    <div class="col-md-6 col-md-offset-3">
+                      <button id="send" type="submit" class="btn btn-success">Tambah</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="clearfix"></div>
-   </div>
-   <div class="clearfix"></div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+  <div class="clearfix"></div>
 </div>
 
 
-<div class="modal fade" id="modal-editperiode" tabindex="-1" role="dialog" aria-hidden="true">
-   <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-            </button>
-         </div>
-         <div class="modal-body" id="editperiode">
-            <div class="x_title">
-               <h2>Tambah Data Periode <small>Administrator</small></h2>
-               <div class="clearfix"></div>
-            </div>
-            <div class="x_content form-horizontal form-label-left">
-               <form action="<?= site_url('Dataperiode/edit_periode') ?>" method="POST">
-                  <div class="item form-group">
-                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Semester <span class="required">*</span>
-                     </label>
-                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <select class="form-control" name="semeter" id="semester">
-                           <option>-Pilih Semester-</option>
-                           <option value="Ganjil">Ganjil</option>
-                           <option value="Genap">Genap</option>
-                        </select>
-                     </div>
-                  </div>
-                  <div class="item form-group">
-                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="tahun_akademik" placeholder="tahun_akademik">Tahun Akademik <span class="required">*</span>
-                     </label>
-                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input type="text" id="tahun_akademik" name="tahun_akademik" class="form-control col-md-7 col-xs-12" data-inputmask="'mask': '9999/9999'">
-                        <input type="hidden" id="kode_semester" name="kode_semester" required>
-                        <input type="hidden" id="status_aktif" name="status_aktif" required>
-                     </div>
-                  </div>
-                  <div class="ln_solid"></div>
-            </div>
-            <div class="modal-footer">
-               <button type="button" class="btn btn-default" data-dismiss="modal">TUTUP</button>
-               <button type="submit" class="btn btn-primary">UBAH</button>
-            </div>
-            </form>
-         </div>
+<div class="modal fade" id="modal-edittahapantkk" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+        </button>
       </div>
-   </div>
+      <div class="modal-body" id="edittahapantkk">
+        <div class="x_title">
+          <h2>Edit Tahapan TKK <small>Administrator</small></h2>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content form-horizontal form-label-left">
+          <form action="<?= site_url('Dataperiode/edit_tkkperiode') ?>" method="POST">
+            <div class="item form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Semester <span class="required">*</span>
+              </label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <input type="text" id="semester_ta" name="semester_ta" class="form-control col-md-7 col-xs-12" readonly>
+                <input type="text" id="kode_tkk_tahap" name="kode_tkk_tahap" readonly required>
+                <input type="text" id="kode_semester" name="kode_semester" readonly required>
+                <input type="text" id="status_aktif_tahapan_kkn" name="status_aktif" readonly required>
+              </div>
+            </div>
+            <div class="item form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Tahapan ke - <span class="required">*</span>
+              </label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <select class="form-control" name="tahap_ke" id="tahap_ke" required>
+                  <option>-Pilih Tahap TKK-</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                </select>
+              </div>
+            </div>
+            <div class="item form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="waktu_pembukaan" placeholder="waktu_pembukaan">Waktu Pembukaan<span class="required">*</span>
+              </label>
+              <div class="col-md-3 col-sm-3 col-xs-3">
+                <input type="date" id="tanggal_pembukaan" name="tanggal_pembukaan" class="form-control col-md-6 col-xs-6" required>
+              </div>
+              <div class="col-md-3 col-sm-3 col-xs-3">
+                <input type="time" id="jam_pembukaan" name="jam_pembukaan" class="form-control col-md-6 col-xs-6" required>
+              </div>
+            </div>
+            <div class="ln_solid"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">TUTUP</button>
+          <button type="submit" class="btn btn-primary">UBAH</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 <!-- /page content -->

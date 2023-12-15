@@ -40,47 +40,45 @@ class Dataperiode extends CI_Controller
    {
       $post = $this->input->post(null, TRUE);
 
-         $post = $this->input->post(null, TRUE);
-         $post['status_aktif'] = 0;
-         $this->M_periode->tambah_periode($post);
-         if ($this->db->affected_rows() > 0) {
-            $this->session->set_flashdata('success', 'Data Berhasil Diubah !');
-         }
-         redirect('Dataperiode');
-      
+      $post = $this->input->post(null, TRUE);
+      $post['status_aktif'] = 0;
+      $this->M_periode->tambah_periode($post);
+      if ($this->db->affected_rows() > 0) {
+         $this->session->set_flashdata('success', 'Data Berhasil Diubah !');
       }
+      redirect('Dataperiode');
+   }
 
    public function edit_periode()
    {
       $post = $this->input->post(null, TRUE);
       $this->form_validation->set_rules('kode_semester', 'Kode Semester', 'required', array(
-      'required' => 'Kode Semester tidak boleh kosong'
+         'required' => 'Kode Semester tidak boleh kosong'
       ));
       $this->form_validation->set_rules('semester', 'Semester', 'required', array(
-      'required' => 'Semester tidak boleh kosong'
+         'required' => 'Semester tidak boleh kosong'
       ));
       $this->form_validation->set_rules('tahun_akademik', 'Tahun Akademik', 'required', array(
-      'required' => 'Tahun Akademik tidak boleh kosong'
+         'required' => 'Tahun Akademik tidak boleh kosong'
       ));
       $this->form_validation->set_rules('status_aktif', 'Status Aktif', 'required', array(
-      'required' => 'Status Aktif tidak boleh kosong'
+         'required' => 'Status Aktif tidak boleh kosong'
       ));
       $this->form_validation->set_rules('kode_semester', 'Kode Semester', 'required', array(
-      'required' => 'Kode Semester tidak boleh kosong'
+         'required' => 'Kode Semester tidak boleh kosong'
       ));
 
       // $this->form_validation->set_error_delimiters('<small><span class="help-block">', '</span></small>');
-      
+
       if ($this->form_validation->run() == FALSE) {
          redirect('Dataperiode');
       } else {
          $post = $this->input->post(null, TRUE);
          $this->M_periode->edit($post);
          if ($this->db->affected_rows() > 0) {
-         $this->session->set_flashdata('success', 'Data Berhasil Diubah !');
-      }
+            $this->session->set_flashdata('success', 'Data Berhasil Diubah !');
+         }
          redirect('Dataperiode');
       }
    }
-
 }

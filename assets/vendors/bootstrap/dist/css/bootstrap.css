@@ -6531,6 +6531,9 @@ button.close {
 .invisible {
   visibility: hidden;
 }
+.v-center {
+  vertical-align: middle !important;
+}
 .text-hide {
   font: 0/0 a;
   color: transparent;

@@ -12,6 +12,7 @@
 
    <!-- Bootstrap -->
    <link href="<?= base_url() ?>assets/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+   <link href="<?= base_url() ?>assets/vendors/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
    <!-- Font Awesome -->
    <link href="<?= base_url() ?>assets/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
    <!-- NProgress -->
@@ -305,26 +306,18 @@
       })
    </script>
 
-<!-- <script>
-   $(document).ready(function () {
-        // Inisialisasi modal
-      $('#modal-editperiode').modal('hide');
-        // Menggunakan Ajax untuk mengirim formulir ke server
-      $('#submitBtn').click(function () {
-            var formData = $('#myForm').serialize();
-            $.ajax({
-               type: 'POST',
-               url: '<?= site_url('Dataperiode/edit_periode') ?>',
-               data: formData,
-               success: function (response) {
-                   // Tampilkan pesan atau lakukan tindakan sesuai respons dari server
-                  alert(response);
-               }
-            });
-      });
-   });
-</script> -->
-
+   <script>
+      $(document).ready(function() {
+         $(document).on('click', '#tomboledittahapantkk', function() {
+            var kode_tkk_tahap = $(this).data('kode_tkk_tahap');
+            var kode_semester = $(this).data('kode_semester');
+            var tahap_ke = $(this).data('tahap_ke');
+            $('#edittahapantkk #kode_tkk_tahap').val(kode_tkk_tahap);
+            $('#edittahapantkk #kode_semester').val(kode_semester);
+            $('#edittahapantkk #tahap_ke').val(tahap_ke);
+         })
+      })
+   </script>
 
 </body>
 
