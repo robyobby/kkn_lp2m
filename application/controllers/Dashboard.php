@@ -9,8 +9,8 @@ class Dashboard extends CI_Controller
     check_not_login();
   }
 
-   public function index()
-   {
-      $this->template->load('templates/View_template', 'templates/View_dashboard', TRUE);
-   }
+  public function index()
+  {
+    $this->template->load('templates/View_template', 'templates/View_dashboard', TRUE);
+  }
 }

@@ -30,16 +30,27 @@
       <div class="login_wrapper">
          <div class="animate form login_form">
             <section class="login_content">
-               <form>
+               <form action="<?= site_url('Auth/proses') ?>" method="POST">
                   <h1>Login Form</h1>
+                  <?= $this->session->flashdata('pesan'); ?>
+                  <?= $this->session->flashdata('pesanAPI'); ?>
                   <div>
-                     <input type="text" class="form-control" placeholder="Email atau NIM" required="" />
+                     <input type="text" name="email" class="form-control" placeholder="Email untuk Admin atau NIM untuk Mahasiswa">
+                     <?= form_error('email') ?>
                   </div>
                   <div>
-                     <input type="password" class="form-control" placeholder="Password atau Password di SIAKAD" required="" />
+                     <input type="password" name="password" class="form-control" placeholder="Password atau Password di SIAKAD">
+                     <?= form_error('password') ?>
                   </div>
                   <div>
-                     <a class="btn btn-default submit" href="index.html">Log in</a>
+                     <select class="form-control" name="jenis_user" id="jenis_user" required>
+                        <option>-Pilih Jenis User-</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Mahasiswa">Mahasiswa</option>
+                     </select>
+                  </div>
+                  <div>
+                     <button type="submit" class="btn btn-default submit">Log in</button>
                   </div>
                   <div class="clearfix"></div>
                   <div class="separator">

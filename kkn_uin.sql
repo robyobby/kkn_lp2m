@@ -121,9 +121,13 @@ CREATE TABLE `kkn_master_tahap` (
   `waktu_penutupan` datetime DEFAULT NULL,
   `status_aktif` varchar(1) DEFAULT NULL,
   PRIMARY KEY (`kode_kkn_tahap`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `kkn_master_tahap` */
+
+insert  into `kkn_master_tahap`(`kode_kkn_tahap`,`jenis_kkn`,`tahap_ke`,`kode_semester`,`waktu_pembukaan`,`waktu_penutupan`,`status_aktif`) values 
+(1,'Tematik',1,1,'2023-12-25 00:00:00','2023-12-27 23:59:00','1'),
+(2,'Tematik',2,1,'2023-12-28 00:00:00','2023-12-29 23:59:00','0');
 
 /*Table structure for table `master_dosen` */
 
@@ -180,8 +184,8 @@ CREATE TABLE `master_semester` (
 /*Data for the table `master_semester` */
 
 insert  into `master_semester`(`kode_semester`,`semester_akademik`,`semester`,`tahun_akademik`,`status_aktif`) values 
-(1,'20231','Ganjil','2023/2024','0'),
-(2,'20232','Genap','2023/2024','1'),
+(1,'20231','Ganjil','2023/2024','1'),
+(2,'20232','Genap','2023/2024','0'),
 (5,'20241','Ganjil','2024/2025','0'),
 (6,'20242','Genap','2024/2025','0');
 
@@ -202,8 +206,8 @@ CREATE TABLE `master_user` (
 
 insert  into `master_user`(`kode_user`,`nama`,`email`,`password`,`status_aktif`) values 
 (1,'M. Robi Dinnoor','robidinnoor@uin-antasari.ac.id','$2y$10$lfopBwtjhbGS9jbCSx3ikO7YMEgPo6zTz2SNVoogP0zEGuImDNeim','0'),
-(2,'MUHAMMAD ROBI DINNOOR','robidinnoor1992@gmail.com','$2y$10$Dr8AQMQMjuDK.u29bexOnuNHC8WBTYckuONPRqPwgLBKxReC9wqki','1'),
-(3,'Muhammad Fajar Maulana','briar_bulldog@yahoo.com','$2y$10$2gtnnFlBxxwPfTO5ZBAEIuCF1yr4lVjpZD5wZN3IGhbn9kj7O3jRq','1');
+(2,'MUHAMMAD ROBI DINNOOR','robidinnoor1992@gmail.com','$2y$10$LVJIem3WbKoCOGnueQ4lDOy/rkmwIe0Kb9mUjzcKC1ImtDIfUmQIG','1'),
+(3,'Muhammad Fajar Maulana','briar_bulldog@yahoo.com','$2y$10$LVJIem3WbKoCOGnueQ4lDOy/rkmwIe0Kb9mUjzcKC1ImtDIfUmQIG','1');
 
 /*Table structure for table `tkk_daftar` */
 
@@ -237,15 +241,37 @@ CREATE TABLE `tkk_master_tahap` (
   `waktu_penutupan` datetime DEFAULT NULL,
   `status_aktif` varchar(1) DEFAULT NULL,
   PRIMARY KEY (`kode_tkk_tahap`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `tkk_master_tahap` */
 
 insert  into `tkk_master_tahap`(`kode_tkk_tahap`,`kode_semester`,`tahap_ke`,`waktu_pembukaan`,`waktu_penutupan`,`status_aktif`) values 
-(1,1,1,'2023-12-14 00:00:00','2023-12-16 23:59:59','0'),
-(2,1,2,'2023-12-17 00:00:00','2023-12-18 23:59:59','0'),
-(3,2,1,'2023-12-19 00:00:00','2023-12-20 23:59:59','0'),
-(4,2,2,'2023-12-21 00:00:00','2023-12-22 23:59:59','1');
+(1,1,1,'2023-12-14 00:00:00','2023-12-16 23:59:00','1'),
+(2,1,2,'2023-12-17 00:00:00','2023-12-18 23:59:00','0'),
+(3,2,1,'2023-12-19 00:00:00','2023-12-20 23:59:00','0'),
+(4,2,2,'2023-12-21 00:05:00','2023-12-24 23:59:00','0'),
+(6,2,3,'2023-12-25 00:00:00','2023-12-26 23:59:00','0');
+
+/*Table structure for table `view_kkn_master_tahap` */
+
+DROP TABLE IF EXISTS `view_kkn_master_tahap`;
+
+/*!50001 DROP VIEW IF EXISTS `view_kkn_master_tahap` */;
+/*!50001 DROP TABLE IF EXISTS `view_kkn_master_tahap` */;
+
+/*!50001 CREATE TABLE  `view_kkn_master_tahap`(
+ `kode_kkn_tahap` int(11) ,
+ `jenis_kkn` varchar(20) ,
+ `tahap_ke` int(11) ,
+ `waktu_pembukaan` datetime ,
+ `waktu_penutupan` datetime ,
+ `status_aktif_tahapan_kkn` varchar(1) ,
+ `kode_semester` int(11) ,
+ `semester_akademik` varchar(10) ,
+ `semester` varchar(7) ,
+ `tahun_akademik` varchar(10) ,
+ `status_aktif_semester` varchar(1) 
+)*/;
 
 /*Table structure for table `view_tkk_master_tahap` */
 
@@ -266,6 +292,13 @@ DROP TABLE IF EXISTS `view_tkk_master_tahap`;
  `tahun_akademik` varchar(10) ,
  `status_aktif_semester` varchar(1) 
 )*/;
+
+/*View structure for view view_kkn_master_tahap */
+
+/*!50001 DROP TABLE IF EXISTS `view_kkn_master_tahap` */;
+/*!50001 DROP VIEW IF EXISTS `view_kkn_master_tahap` */;
+
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_kkn_master_tahap` AS select `kkn_master_tahap`.`kode_kkn_tahap` AS `kode_kkn_tahap`,`kkn_master_tahap`.`jenis_kkn` AS `jenis_kkn`,`kkn_master_tahap`.`tahap_ke` AS `tahap_ke`,`kkn_master_tahap`.`waktu_pembukaan` AS `waktu_pembukaan`,`kkn_master_tahap`.`waktu_penutupan` AS `waktu_penutupan`,`kkn_master_tahap`.`status_aktif` AS `status_aktif_tahapan_kkn`,`master_semester`.`kode_semester` AS `kode_semester`,`master_semester`.`semester_akademik` AS `semester_akademik`,`master_semester`.`semester` AS `semester`,`master_semester`.`tahun_akademik` AS `tahun_akademik`,`master_semester`.`status_aktif` AS `status_aktif_semester` from (`master_semester` join `kkn_master_tahap` on(`master_semester`.`kode_semester` = `kkn_master_tahap`.`kode_semester`)) */;
 
 /*View structure for view view_tkk_master_tahap */
 
