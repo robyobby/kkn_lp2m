@@ -13,7 +13,13 @@ class Datatkkperiode extends CI_Controller
 
    public function index()
    {
-      $data['tkkrow'] = $this->M_tkkperiode->ambil_datatkkperiode();
+      $status_aktif = 1;
+      $tkkrow = $this->M_tkkperiode->ambil_datatkkperiode();
+      $semesterrow = $this->M_tkkperiode->ambil_baris_semester($status_aktif)->result_array();
+      $data = [
+         'tkkrow' => $tkkrow,
+         'semesterrow' => $semesterrow
+      ];
       $this->template->load('templates/View_template', 'master/View_tkkperiode', $data);
    }
 
@@ -48,7 +54,7 @@ class Datatkkperiode extends CI_Controller
       redirect('Datatkkperiode');
    }
 
-   public function tambah_periode()
+   public function tambah_tkkperiode()
    {
       $post = $this->input->post(null, TRUE);
 
@@ -59,5 +65,32 @@ class Datatkkperiode extends CI_Controller
          $this->session->set_flashdata('success', 'Data Berhasil Diubah !');
       }
       redirect('Datatkkperiode');
+   }
+
+   public function edit_tkkperiode()
+   {
+      $post = $this->input->post(null, TRUE);
+      $this->form_validation->set_rules('tahap_ke', 'Tahap Ke', 'required', array(
+         'required' => 'Tahapan tidak boleh kosong'
+      ));
+      $this->form_validation->set_rules('waktu_pembukaan', 'Waktu Pembukaan', 'required', array(
+         'required' => 'Waktu Pembukaan tidak boleh kosong'
+      ));
+      $this->form_validation->set_rules('waktu_penutupan', 'Waktu Penutupan', 'required', array(
+         'required' => 'Waktu Penutupan tidak boleh kosong'
+      ));
+
+      // $this->form_validation->set_error_delimiters('<small><span class="help-block">', '</span></small>');
+
+      if ($this->form_validation->run() == FALSE) {
+         redirect('Datatkkperiode');
+      } else {
+         $post = $this->input->post(null, TRUE);
+         $this->M_tkkperiode->edit($post);
+         if ($this->db->affected_rows() > 0) {
+            $this->session->set_flashdata('success', 'Data Berhasil Diubah !');
+         }
+         redirect('Datatkkperiode');
+      }
    }
 }

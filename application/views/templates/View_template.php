@@ -312,9 +312,40 @@
             var kode_tkk_tahap = $(this).data('kode_tkk_tahap');
             var kode_semester = $(this).data('kode_semester');
             var tahap_ke = $(this).data('tahap_ke');
+            var status_aktif_tahapan_tkk = $(this).data('status_aktif_tahapan_tkk');
+            var waktu_pembukaan = $(this).data('waktu_pembukaan');
+            var waktu_penutupan = $(this).data('waktu_penutupan');
+            var semester_ta = $(this).data('semester_ta');
             $('#edittahapantkk #kode_tkk_tahap').val(kode_tkk_tahap);
             $('#edittahapantkk #kode_semester').val(kode_semester);
+            $('#edittahapantkk #waktu_penutupan').val(waktu_penutupan);
+            $('#edittahapantkk #waktu_pembukaan').val(waktu_pembukaan);
+            $('#edittahapantkk #status_aktif_tahapan_tkk').val(status_aktif_tahapan_tkk);
             $('#edittahapantkk #tahap_ke').val(tahap_ke);
+            $('#edittahapantkk #semester_ta').val(semester_ta);
+         })
+      })
+   </script>.
+
+   <script>
+      $(document).ready(function() {
+         $(document).on('click', '#tomboledittahapankkn', function() {
+            var kode_kkn_tahap = $(this).data('kode_kkn_tahap');
+            var kode_semester = $(this).data('kode_semester');
+            var tahap_ke = $(this).data('tahap_ke');
+            var status_aktif_tahapan_kkn = $(this).data('status_aktif_tahapan_kkn');
+            var waktu_pembukaan = $(this).data('waktu_pembukaan');
+            var waktu_penutupan = $(this).data('waktu_penutupan');
+            var semester_ta = $(this).data('semester_ta');
+            var jenis_kkn = $(this).data('jenis_kkn');
+            $('#edittahapankkn #kode_kkn_tahap').val(kode_kkn_tahap);
+            $('#edittahapankkn #kode_semester').val(kode_semester);
+            $('#edittahapankkn #waktu_penutupan').val(waktu_penutupan);
+            $('#edittahapankkn #waktu_pembukaan').val(waktu_pembukaan);
+            $('#edittahapankkn #status_aktif_tahapan_kkn').val(status_aktif_tahapan_kkn);
+            $('#edittahapankkn #tahap_ke').val(tahap_ke);
+            $('#edittahapankkn #jenis_kkn').val(jenis_kkn);
+            $('#edittahapankkn #semester_ta').val(semester_ta);
          })
       })
    </script>
