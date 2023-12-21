@@ -56,8 +56,8 @@
                      <ul class="nav side-menu">
                         <li><a><i class="fa fa-desktop"></i> Daftar <span class="fa fa-chevron-down"></span></a>
                            <ul class="nav child_menu">
-                              <li><a href="<?= base_url('Datauser') ?>"><i class="fa fa-user"></i> TKK <span class="fa fa-chevron"></span></a>
-                              <li><a href="<?= base_url('Dataperiode') ?>"><i class="fa fa-calendar"></i> KKN <span class="fa fa-chevron"></span></a>
+                              <li><a href="<?= base_url('MhsDaftarTKK') ?>"><i class="fa fa-check-square"></i> TKK <span class="fa fa-chevron"></span></a>
+                              <li><a href="<?= base_url('MhsDaftarKKN') ?>"><i class="fa fa-plus-square"></i> KKN <span class="fa fa-chevron"></span></a>
                            </ul>
                         </li>
                      </ul>
@@ -115,6 +115,8 @@
    <script src="<?= base_url() ?>assets/vendors/fastclick/lib/fastclick.js"></script>
    <!-- NProgress -->
    <script src="<?= base_url() ?>assets/vendors/nprogress/nprogress.js"></script>
+   <!-- jQuery Smart Wizard -->
+   <script src="<?= base_url() ?>assets/vendors/jQuery-Smart-Wizard/js/jquery.smartWizard.js"></script>
    <!-- validator -->
    <script src="<?= base_url() ?>assets/vendors/validator/validator.js"></script>
    <!-- Chart.js -->
