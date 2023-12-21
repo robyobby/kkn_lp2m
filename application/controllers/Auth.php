@@ -12,8 +12,7 @@ class Auth extends CI_Controller
 
    public function index()
    {
-      // $this->template->load('templates/View_template', 'templates/View_dashboard', FALSE);
-      $this->load->view('templates/View_login');
+      $this->load->view('View_login');
    }
 
    public function proses()
@@ -30,7 +29,7 @@ class Auth extends CI_Controller
          $this->form_validation->set_error_delimiters('<small><span class="text-danger">', '</small>');
 
          if ($this->form_validation->run() == FALSE) {
-            $this->load->view('templates/View_login');
+            $this->load->view('admin/templates/View_login');
             $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">
             Akun Admin </div>');
          } else {
@@ -46,7 +45,7 @@ class Auth extends CI_Controller
          $this->form_validation->set_error_delimiters('<small><span class="text-danger">', '</small>');
 
          if ($this->form_validation->run() == FALSE) {
-            $this->load->view('templates/View_login');
+            $this->load->view('admin/templates/View_login');
          } else {
             $this->_loginMahasiswa();
          }
@@ -97,12 +96,8 @@ class Auth extends CI_Controller
       $userdata['password'] = $this->security->xss_clean(html_escape($this->input->post('password')));
 
       $userdata = $this->M_user->APIMahasiswa($userdata);
-      // print_r($userdata);
-      // exit;
-      if (!empty($userdata['data']['username'])) {
 
-         // success
-         // echo "Login";
+      if (!empty($userdata['data']['username'])) {
          $userdataArr['username'] = $userdata['data']['username'];
          $userdataArr['nim'] = $userdata['data']['nim'];
          $userdataArr['name'] = $userdata['data']['name'];
@@ -121,24 +116,13 @@ class Auth extends CI_Controller
          $userdataArr['kecamatan'] = $userdata['data']['kecamatan'];
          $userdataArr['kabupaten'] = $userdata['data']['kabupaten'];
          $userdataArr['provinsi'] = $userdata['data']['provinsi'];
-         // print_r($userdataArr);
-         // exit;
-         $this->session->set_userdata('user', $userdataArr);
-         // redirect(base_url());
-         // die();
+         $this->session->set_userdata('userMahasiswa', $userdataArr);
          $this->session->set_flashdata('pesanAPI', '<div class="alert alert-success" role="alert"> Login API Sukses ! </div>');
-         redirect('Auth');
+         redirect('MhsDashboard');
       } else {
-         // fail
          $this->session->set_flashdata('pesanAPI', '<div class="alert alert-danger" role="alert"> Login API Gagal ! </div>');
          redirect('Auth');
-         // $this->session->set_flashdata('Pesan', '<div class="alert alert-danger" role="alert">
-         // Gagal ! </div>');
-         // $this->session->set_flashdata('pesan', $userdata['password']);
-         // // die();
-         // redirect('Auth');
       }
-      // $this->session->set_flashdata('pesan', $userdata['password']);
    }
 
    public function logout()
@@ -146,5 +130,12 @@ class Auth extends CI_Controller
       $params = array('kode_user', 'email', 'nama');
       $this->session->unset_userdata($params);
       redirect('');
+   }
+
+   public function logout_mahasiswa()
+   {
+      $this->session->unset_userdata('userMahasiswa');
+      redirect('Auth');
+      die();
    }
 }

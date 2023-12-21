@@ -20,7 +20,7 @@ class Datatkkperiode extends CI_Controller
          'tkkrow' => $tkkrow,
          'semesterrow' => $semesterrow
       ];
-      $this->template->load('templates/View_template', 'master/View_tkkperiode', $data);
+      $this->template->load('admin/templates/View_template', 'admin/master/View_tkkperiode', $data);
    }
 
    public function ubah_status_aktif($kode_tkk_tahap)

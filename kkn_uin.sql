@@ -143,9 +143,12 @@ CREATE TABLE `master_dosen` (
   `jk` varchar(1) DEFAULT NULL,
   `status_aktif` varchar(1) DEFAULT NULL,
   PRIMARY KEY (`kode_dosen`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `master_dosen` */
+
+insert  into `master_dosen`(`kode_dosen`,`nidn`,`nip`,`nama`,`jabatan`,`notelp`,`jk`,`status_aktif`) values 
+(1,'111111','12121212','Fullan','Lektor','123456','l','1');
 
 /*Table structure for table `master_mahasiswa` */
 
@@ -155,18 +158,22 @@ CREATE TABLE `master_mahasiswa` (
   `kode_mahasiswa` int(11) NOT NULL AUTO_INCREMENT,
   `nim` varchar(20) DEFAULT NULL,
   `nama` varchar(100) DEFAULT NULL,
+  `jenjang` varchar(2) DEFAULT NULL,
   `fakultas` varchar(50) DEFAULT NULL,
   `prodi` varchar(50) DEFAULT NULL,
   `alamat` varchar(100) DEFAULT NULL,
   `notelp` varchar(20) DEFAULT NULL,
   `jk` varchar(1) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
-  `password` varchar(60) DEFAULT NULL,
   `status_aktif` varchar(1) DEFAULT NULL,
   PRIMARY KEY (`kode_mahasiswa`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `master_mahasiswa` */
+
+insert  into `master_mahasiswa`(`kode_mahasiswa`,`nim`,`nama`,`jenjang`,`fakultas`,`prodi`,`alamat`,`notelp`,`jk`,`email`,`status_aktif`) values 
+(1,'20101010011','tes','S1','SYARIAH','HUKUM TATA NEGARA','Banjarmasin','089699','P','pp@gmail.com','1'),
+(5,'2010101001','TESTING MONI1','S1','TARBIYAH DAN KEGURUAN','ILMU PERPUSTAKAAN DAN INFORMASI ISLAM','jalan cempaka, 03, 01, KOTA BANJAR BARU, KALIMANTAN SELATAN','082100000000','P','testing@yahoo.co.id','1');
 
 /*Table structure for table `master_semester` */
 
@@ -225,9 +232,12 @@ CREATE TABLE `tkk_daftar` (
   `tanggal_expired` datetime DEFAULT NULL,
   `status_aktif` varchar(1) DEFAULT NULL,
   PRIMARY KEY (`kode_tkk_daftar`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `tkk_daftar` */
+
+insert  into `tkk_daftar`(`kode_tkk_daftar`,`kode_tkk_tahap`,`kode_mahasiswa`,`kode_dosen`,`tanggal_daftar`,`status_lulus`,`nilai_n1`,`no_sertifikat`,`tanggal_expired`,`status_aktif`) values 
+(1,1,5,1,'2023-12-14 08:28:43','l',85,'120131','2024-11-01 12:29:19','1');
 
 /*Table structure for table `tkk_master_tahap` */
 
@@ -273,6 +283,41 @@ DROP TABLE IF EXISTS `view_kkn_master_tahap`;
  `status_aktif_semester` varchar(1) 
 )*/;
 
+/*Table structure for table `view_tkk_daftar` */
+
+DROP TABLE IF EXISTS `view_tkk_daftar`;
+
+/*!50001 DROP VIEW IF EXISTS `view_tkk_daftar` */;
+/*!50001 DROP TABLE IF EXISTS `view_tkk_daftar` */;
+
+/*!50001 CREATE TABLE  `view_tkk_daftar`(
+ `kode_tkk_daftar` int(11) ,
+ `kode_tkk_tahap` int(11) ,
+ `kode_mahasiswa` int(11) ,
+ `kode_dosen` int(11) ,
+ `tanggal_daftar` datetime ,
+ `status_lulus` varchar(5) ,
+ `nilai_n1` float ,
+ `no_sertifikat` varchar(20) ,
+ `tanggal_expired` datetime ,
+ `status_aktif_tkk_daftar` varchar(1) ,
+ `tahap_ke` int(11) ,
+ `waktu_pembukaan` datetime ,
+ `waktu_penutupan` datetime ,
+ `status_aktif_tahapan_tkk` varchar(1) ,
+ `kode_semester` int(11) ,
+ `semester_akademik` varchar(10) ,
+ `semester` varchar(7) ,
+ `tahun_akademik` varchar(10) ,
+ `status_aktif_semester` varchar(1) ,
+ `nim` varchar(20) ,
+ `nama_mahasiswa` varchar(100) ,
+ `prodi` varchar(50) ,
+ `nidn` varchar(10) ,
+ `nip` varchar(15) ,
+ `nama_dosen` varchar(100) 
+)*/;
+
 /*Table structure for table `view_tkk_master_tahap` */
 
 DROP TABLE IF EXISTS `view_tkk_master_tahap`;
@@ -299,6 +344,13 @@ DROP TABLE IF EXISTS `view_tkk_master_tahap`;
 /*!50001 DROP VIEW IF EXISTS `view_kkn_master_tahap` */;
 
 /*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_kkn_master_tahap` AS select `kkn_master_tahap`.`kode_kkn_tahap` AS `kode_kkn_tahap`,`kkn_master_tahap`.`jenis_kkn` AS `jenis_kkn`,`kkn_master_tahap`.`tahap_ke` AS `tahap_ke`,`kkn_master_tahap`.`waktu_pembukaan` AS `waktu_pembukaan`,`kkn_master_tahap`.`waktu_penutupan` AS `waktu_penutupan`,`kkn_master_tahap`.`status_aktif` AS `status_aktif_tahapan_kkn`,`master_semester`.`kode_semester` AS `kode_semester`,`master_semester`.`semester_akademik` AS `semester_akademik`,`master_semester`.`semester` AS `semester`,`master_semester`.`tahun_akademik` AS `tahun_akademik`,`master_semester`.`status_aktif` AS `status_aktif_semester` from (`master_semester` join `kkn_master_tahap` on(`master_semester`.`kode_semester` = `kkn_master_tahap`.`kode_semester`)) */;
+
+/*View structure for view view_tkk_daftar */
+
+/*!50001 DROP TABLE IF EXISTS `view_tkk_daftar` */;
+/*!50001 DROP VIEW IF EXISTS `view_tkk_daftar` */;
+
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_tkk_daftar` AS select `tkk_daftar`.`kode_tkk_daftar` AS `kode_tkk_daftar`,`tkk_daftar`.`kode_tkk_tahap` AS `kode_tkk_tahap`,`tkk_daftar`.`kode_mahasiswa` AS `kode_mahasiswa`,`tkk_daftar`.`kode_dosen` AS `kode_dosen`,`tkk_daftar`.`tanggal_daftar` AS `tanggal_daftar`,`tkk_daftar`.`status_lulus` AS `status_lulus`,`tkk_daftar`.`nilai_n1` AS `nilai_n1`,`tkk_daftar`.`no_sertifikat` AS `no_sertifikat`,`tkk_daftar`.`tanggal_expired` AS `tanggal_expired`,`tkk_daftar`.`status_aktif` AS `status_aktif_tkk_daftar`,`view_tkk_master_tahap`.`tahap_ke` AS `tahap_ke`,`view_tkk_master_tahap`.`waktu_pembukaan` AS `waktu_pembukaan`,`view_tkk_master_tahap`.`waktu_penutupan` AS `waktu_penutupan`,`view_tkk_master_tahap`.`status_aktif_tahapan_tkk` AS `status_aktif_tahapan_tkk`,`view_tkk_master_tahap`.`kode_semester` AS `kode_semester`,`view_tkk_master_tahap`.`semester_akademik` AS `semester_akademik`,`view_tkk_master_tahap`.`semester` AS `semester`,`view_tkk_master_tahap`.`tahun_akademik` AS `tahun_akademik`,`view_tkk_master_tahap`.`status_aktif_semester` AS `status_aktif_semester`,`master_mahasiswa`.`nim` AS `nim`,`master_mahasiswa`.`nama` AS `nama_mahasiswa`,`master_mahasiswa`.`prodi` AS `prodi`,`master_dosen`.`nidn` AS `nidn`,`master_dosen`.`nip` AS `nip`,`master_dosen`.`nama` AS `nama_dosen` from (((`master_dosen` join `tkk_daftar` on(`master_dosen`.`kode_dosen` = `tkk_daftar`.`kode_dosen`)) join `master_mahasiswa` on(`master_mahasiswa`.`kode_mahasiswa` = `tkk_daftar`.`kode_mahasiswa`)) join `view_tkk_master_tahap` on(`view_tkk_master_tahap`.`kode_tkk_tahap` = `tkk_daftar`.`kode_tkk_tahap`)) */;
 
 /*View structure for view view_tkk_master_tahap */
 

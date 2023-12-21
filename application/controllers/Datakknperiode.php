@@ -20,7 +20,7 @@ class Datakknperiode extends CI_Controller
          'kknrow' => $kknrow,
          'semesterrow' => $semesterrow
       ];
-      $this->template->load('templates/View_template', 'master/View_kknperiode', $data);
+      $this->template->load('admin/templates/View_template', 'admin/master/View_kknperiode', $data);
    }
 
    public function ubah_status_aktif($kode_kkn_tahap)

@@ -14,7 +14,7 @@ class Dataperiode extends CI_Controller
    public function index()
    {
       $data['row'] = $this->M_periode->ambil_dataperiode();
-      $this->template->load('templates/View_template', 'master/View_periode', $data);
+      $this->template->load('admin/templates/View_template', 'admin/master/View_periode', $data);
    }
 
    public function ubah_status_aktif($kode_semester)
@@ -38,8 +38,6 @@ class Dataperiode extends CI_Controller
 
    public function tambah_periode()
    {
-      $post = $this->input->post(null, TRUE);
-
       $post = $this->input->post(null, TRUE);
       $post['status_aktif'] = 0;
       $this->M_periode->tambah_periode($post);

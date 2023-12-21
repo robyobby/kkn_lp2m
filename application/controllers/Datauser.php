@@ -14,7 +14,7 @@ class Datauser extends CI_Controller
   public function index()
   {
     $data['row'] = $this->M_user->ambil_datauser();
-    $this->template->load('templates/View_template', 'master/View_user', $data);
+    $this->template->load('admin/templates/View_template', 'admin/master/View_user', $data);
   }
 
   public function edit_user()

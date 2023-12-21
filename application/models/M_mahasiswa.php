@@ -1,0 +1,48 @@
+<?php
+defined('BASEPATH') or exit('No direct script access allowed');
+
+class M_mahasiswa extends CI_Model
+{
+   public function ambil_data($nim)
+   {
+      // $query = $this->db->query("SELECT * FROM master_mahasiswa WHERE nim = $nim");
+      $this->db->select('*');
+      $this->db->from('master_mahasiswa');
+      $this->db->where_in('nim', $nim);
+      $query = $this->db->get();
+      $result = $query->result();
+
+      if ($result) {
+         return $query;
+      } else {
+         return $query;
+      }
+   }
+
+   public function ambil_data_TKK($nim)
+   {
+      // $query = $this->db->query("SELECT * FROM master_mahasiswa WHERE nim = $nim");
+      $this->db->select('*');
+      $this->db->from('view_tkk_daftar');
+      $this->db->where_in('nim', $nim);
+      $query = $this->db->get();
+      $result = $query->result();
+
+      if ($result) {
+         return $query;
+      } else {
+         return $query;
+      }
+   }
+
+   public function tambah_mahasiswa($post)
+   {
+      $this->db->insert('master_mahasiswa', $post);
+   }
+
+   public function edit_mahasiswa($nim, $post)
+   {
+      $this->db->where('nim', $nim);
+      $this->db->update('master_mahasiswa', $post);
+   }
+}

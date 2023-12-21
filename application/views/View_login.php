@@ -34,6 +34,7 @@
                   <h1>Login Form</h1>
                   <?= $this->session->flashdata('pesan'); ?>
                   <?= $this->session->flashdata('pesanAPI'); ?>
+                  <?= $this->session->flashdata('msg'); ?>
                   <div>
                      <input type="text" name="email" class="form-control" placeholder="Email untuk Admin atau NIM untuk Mahasiswa">
                      <?= form_error('email') ?>
