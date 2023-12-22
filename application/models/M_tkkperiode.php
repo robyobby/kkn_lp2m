@@ -19,6 +19,12 @@ class M_tkkperiode extends CI_Model
       return $query;
    }
 
+   public function ambil_baris_tkk_tahap($status_aktif)
+   {
+      $query = $this->db->query("SELECT * FROM view_tkk_master_tahap WHERE status_aktif_tahapan_tkk = $status_aktif");
+      return $query;
+   }
+
    public function gabungbaris($kode_semester)
    {
       $this->db->where('kode_semester', $kode_semester);

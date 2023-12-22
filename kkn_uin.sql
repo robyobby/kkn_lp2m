@@ -236,9 +236,6 @@ CREATE TABLE `tkk_daftar` (
 
 /*Data for the table `tkk_daftar` */
 
-insert  into `tkk_daftar`(`kode_tkk_daftar`,`kode_tkk_tahap`,`kode_mahasiswa`,`kode_dosen`,`tanggal_daftar`,`status_lulus`,`nilai_n1`,`no_sertifikat`,`tanggal_expired`,`status_aktif`) values 
-(1,1,5,1,'2023-12-14 08:28:43','l',85,'120131','2024-11-01 12:29:19','1');
-
 /*Table structure for table `tkk_master_tahap` */
 
 DROP TABLE IF EXISTS `tkk_master_tahap`;
@@ -256,7 +253,7 @@ CREATE TABLE `tkk_master_tahap` (
 /*Data for the table `tkk_master_tahap` */
 
 insert  into `tkk_master_tahap`(`kode_tkk_tahap`,`kode_semester`,`tahap_ke`,`waktu_pembukaan`,`waktu_penutupan`,`status_aktif`) values 
-(1,1,1,'2023-12-14 00:00:00','2023-12-16 23:59:00','1'),
+(1,1,1,'2023-12-21 00:00:00','2023-12-27 15:02:00','1'),
 (2,1,2,'2023-12-17 00:00:00','2023-12-18 23:59:00','0'),
 (3,2,1,'2023-12-19 00:00:00','2023-12-20 23:59:00','0'),
 (4,2,2,'2023-12-21 00:05:00','2023-12-24 23:59:00','0'),

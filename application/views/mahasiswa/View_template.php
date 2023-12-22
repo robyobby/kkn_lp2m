@@ -291,81 +291,36 @@
    </script>
 
    <script>
-      $(document).ready(function() {
-         $(document).on('click', '#tomboledituser', function() {
-            var kode_user = $(this).data('kode_user');
-            var nama = $(this).data('nama');
-            var email = $(this).data('email');
-            var status_aktif = $(this).data('status_aktif');
-            $('#edituser #kode_user').val(kode_user);
-            $('#edituser #nama').val(nama);
-            $('#edituser #email').val(email);
-            $('#edituser #status_aktif').val(status_aktif);
-         })
-      })
+      var waktu_penutupan = '<?= $waktudaftar['waktu_penutupan']; ?>'
+      var targetDate = new Date(waktu_penutupan);
+
+      function updateCountdown() {
+         // Hitung sisa waktu antara waktu sekarang dan waktu target
+         var currentDate = new Date();
+         var timeDifference = targetDate - currentDate;
+
+         // Jika waktu sudah habis, keluar dari halaman
+         if (timeDifference <= 0) {
+            window.location.href = '<?= base_url('MhsDaftarTKK/tutup'); ?>';
+            return;
+         }
+
+         // Hitung sisa waktu dalam detik, menit, jam, dan hari
+         var seconds = Math.floor((timeDifference / 1000) % 60);
+         var minutes = Math.floor((timeDifference / 1000 / 60) % 60);
+         var hours = Math.floor((timeDifference / (1000 * 60 * 60)) % 24);
+         var days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+
+         // Tampilkan sisa waktu di elemen dengan id "countdown"
+         document.getElementById('countdown').innerHTML = days + ' hari: ' + hours + ' jam: ' + minutes + ' menit: ' + seconds + ' detik';
+
+         // Perbarui setiap 1 detik
+         setTimeout(updateCountdown, 1000);
+      }
+
+      // Panggil fungsi updateCountdown() untuk pertama kali
+      updateCountdown();
    </script>
-
-   <script>
-      $(document).ready(function() {
-         $(document).on('click', '#tomboleditperiode', function() {
-            var kode_semester = $(this).data('kode_semester');
-            var semester_akademik = $(this).data('semester_akademik');
-            var semester = $(this).data('semester');
-            var tahun_akademik = $(this).data('tahun_akademik');
-            var status_aktif = $(this).data('status_aktif');
-            $('#editperiode #kode_semester').val(kode_semester);
-            $('#editperiode #semester_akademik').val(semester_akademik);
-            $('#editperiode #semester').val(semester);
-            $('#editperiode #tahun_akademik').val(tahun_akademik);
-            $('#editperiode #status_aktif').val(status_aktif);
-         })
-      })
-   </script>
-
-   <script>
-      $(document).ready(function() {
-         $(document).on('click', '#tomboledittahapantkk', function() {
-            var kode_tkk_tahap = $(this).data('kode_tkk_tahap');
-            var kode_semester = $(this).data('kode_semester');
-            var tahap_ke = $(this).data('tahap_ke');
-            var status_aktif_tahapan_tkk = $(this).data('status_aktif_tahapan_tkk');
-            var waktu_pembukaan = $(this).data('waktu_pembukaan');
-            var waktu_penutupan = $(this).data('waktu_penutupan');
-            var semester_ta = $(this).data('semester_ta');
-            $('#edittahapantkk #kode_tkk_tahap').val(kode_tkk_tahap);
-            $('#edittahapantkk #kode_semester').val(kode_semester);
-            $('#edittahapantkk #waktu_penutupan').val(waktu_penutupan);
-            $('#edittahapantkk #waktu_pembukaan').val(waktu_pembukaan);
-            $('#edittahapantkk #status_aktif_tahapan_tkk').val(status_aktif_tahapan_tkk);
-            $('#edittahapantkk #tahap_ke').val(tahap_ke);
-            $('#edittahapantkk #semester_ta').val(semester_ta);
-         })
-      })
-   </script>.
-
-   <script>
-      $(document).ready(function() {
-         $(document).on('click', '#tomboledittahapankkn', function() {
-            var kode_kkn_tahap = $(this).data('kode_kkn_tahap');
-            var kode_semester = $(this).data('kode_semester');
-            var tahap_ke = $(this).data('tahap_ke');
-            var status_aktif_tahapan_kkn = $(this).data('status_aktif_tahapan_kkn');
-            var waktu_pembukaan = $(this).data('waktu_pembukaan');
-            var waktu_penutupan = $(this).data('waktu_penutupan');
-            var semester_ta = $(this).data('semester_ta');
-            var jenis_kkn = $(this).data('jenis_kkn');
-            $('#edittahapankkn #kode_kkn_tahap').val(kode_kkn_tahap);
-            $('#edittahapankkn #kode_semester').val(kode_semester);
-            $('#edittahapankkn #waktu_penutupan').val(waktu_penutupan);
-            $('#edittahapankkn #waktu_pembukaan').val(waktu_pembukaan);
-            $('#edittahapankkn #status_aktif_tahapan_kkn').val(status_aktif_tahapan_kkn);
-            $('#edittahapankkn #tahap_ke').val(tahap_ke);
-            $('#edittahapankkn #jenis_kkn').val(jenis_kkn);
-            $('#edittahapankkn #semester_ta').val(semester_ta);
-         })
-      })
-   </script>
-
 </body>
 
 </html>
