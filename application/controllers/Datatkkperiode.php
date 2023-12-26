@@ -57,8 +57,6 @@ class Datatkkperiode extends CI_Controller
    public function tambah_tkkperiode()
    {
       $post = $this->input->post(null, TRUE);
-
-      $post = $this->input->post(null, TRUE);
       $post['status_aktif'] = 0;
       $this->M_tkkperiode->tambah_tkkperiode($post);
       if ($this->db->affected_rows() > 0) {

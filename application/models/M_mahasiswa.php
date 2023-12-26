@@ -40,6 +40,11 @@ class M_mahasiswa extends CI_Model
       $this->db->insert('master_mahasiswa', $post);
    }
 
+   public function tambah_tkkdaftar($post)
+   {
+      $this->db->insert('tkk_daftar', $post);
+   }
+
    public function edit_mahasiswa($nim, $post)
    {
       $this->db->where('nim', $nim);

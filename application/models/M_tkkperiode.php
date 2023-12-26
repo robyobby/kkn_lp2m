@@ -25,6 +25,25 @@ class M_tkkperiode extends CI_Model
       return $query;
    }
 
+   public function ambil_daftartkk($nim)
+   {
+      // $query = $this->db->query("SELECT * FROM view_tkk_daftar WHERE nim = $nim AND status_aktif_tkk_daftar = 1");
+      // return $query;
+
+      $this->db->select('*');
+      $this->db->from('view_tkk_daftar');
+      $this->db->where_in('nim', $nim);
+      $this->db->where('status_aktif_tkk_daftar', 1);
+      $query = $this->db->get();
+      $result = $query->result();
+
+      if ($result) {
+         return $query;
+      } else {
+         return $query;
+      }
+   }
+   
    public function gabungbaris($kode_semester)
    {
       $this->db->where('kode_semester', $kode_semester);

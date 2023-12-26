@@ -270,6 +270,24 @@
          })
       })
 
+      $('.btn-daftar').on('click', function(e) {
+         e.preventDefault();
+         Swal.fire({
+            title: 'Apakah anda yakin ingin mendaftar TKK Tahap ini ?',
+            text: "Anda akan langsung terdaftar apabila memilih ya!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Batal',
+            confirmButtonText: 'Ya, Daftar!'
+         }).then((result) => {
+            if (result.value) {
+               document.getElementById('daftarTKK').submit();
+            }
+         })
+      })
+
       $('.btn-nonaktif').on('click', function(e) {
          e.preventDefault();
          const href = $(this).attr('href');

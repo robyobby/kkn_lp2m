@@ -6,7 +6,7 @@ class MhsDashboard extends CI_Controller
    function __construct()
    {
       parent::__construct();
-      $this->load->model(['M_mahasiswa']);
+      $this->load->model(['M_mahasiswa', 'M_tkkperiode']);
       $userdataArr = $this->session->userdata('userMahasiswa');
       if (empty($userdataArr)) {
          $this->session->set_flashdata('msg', 'Mohon Login karena Sesi sudah habis');
@@ -20,6 +20,7 @@ class MhsDashboard extends CI_Controller
       $data['userMahasiswa'] = $this->session->userdata('userMahasiswa');
       $nim = $data['userMahasiswa']['nim'];
       $data['mahasiswa'] = $this->M_mahasiswa->ambil_data($nim)->row_array();
+      $data['mahasiswaTKK'] = $this->M_tkkperiode->ambil_daftartkk($nim)->row_array();
       $data['daftarTKK'] = $this->M_mahasiswa->ambil_data_TKK($nim)->result_array();
       // print_r($data['daftarTKK']);
       $this->template->load('mahasiswa/View_template', 'mahasiswa/View_dashboard', $data);
