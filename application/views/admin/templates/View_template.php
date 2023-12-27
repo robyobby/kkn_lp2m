@@ -67,6 +67,14 @@
                            </ul>
                         </li>
                      </ul>
+                     <ul class="nav side-menu">
+                        <li><a><i class="fa fa-floppy-o"></i> Validasi <span class="fa fa-chevron-down"></span></a>
+                           <ul class="nav child_menu">
+                              <li><a href="<?= base_url('ValidasiTKK') ?>"><i class="fa fa-check-square"></i> TKK <span class="fa fa-chevron"></span></a>
+                              <li><a href="<?= base_url('ValidasiKKN') ?>"><i class="fa fa-plus-square"></i> KKN <span class="fa fa-chevron"></span></a>
+                           </ul>
+                        </li>
+                     </ul>
                   </div>
                </div>
                <!-- /sidebar menu -->

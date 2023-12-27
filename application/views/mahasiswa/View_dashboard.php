@@ -83,7 +83,7 @@
                                           if ($data['status_lulus'] == 'l') : ?> <!--lulus -->
                                              <blockquote class="message">Selamat ! Anda telah lulus Tes Keterampilan Keagamaan pada tahap ini. Nilai dari TKK ini berlaku sampai tanggal <?= date("d F Y", strtotime($data['tanggal_expired'])); ?>.</blockquote>
                                           <?php elseif ($data['status_lulus'] == 'tl') : ?> <!--tidak lulus -->
-                                             <blockquote class="message">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua butcher retro keffiyeh dreamcatcher synth.</blockquote>
+                                             <blockquote class="message">Maaf ! Anda belum lulus untuk Tes Keterampilan pada Tahap ke <?= $data['tahap_ke']; ?> Semester <?= $data['semester']; ?> T.A. <?= $data['tahun_akademik']; ?></blockquote>
                                           <?php elseif ($data['status_lulus'] == 'tg') : ?> <!--menunggu -->
                                              <blockquote class="message">Selamat ! Anda telah terdaftar pada Tes Keterampilan Keagamaan pada Tahap ke <?= $data['tahap_ke']; ?> Semester <?= $data['semester']; ?> T.A. <?= $data['tahun_akademik']; ?> </blockquote>
                                           <?php endif; ?>

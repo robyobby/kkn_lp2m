@@ -43,7 +43,7 @@ class M_tkkperiode extends CI_Model
          return $query;
       }
    }
-   
+
    public function gabungbaris($kode_semester)
    {
       $this->db->where('kode_semester', $kode_semester);
@@ -69,5 +69,20 @@ class M_tkkperiode extends CI_Model
       $params['status_aktif'] = $post['status_aktif'];
       $this->db->where('kode_tkk_tahap', $post['kode_tkk_tahap']);
       $this->db->update('tkk_master_tahap', $params);
+   }
+
+   public function dataTKK_aktif($status_aktif)
+   {
+      $this->db->select('*');
+      $this->db->from('view_tkk_daftar');
+      $this->db->where('status_aktif_tkk_daftar', $status_aktif);
+      $query = $this->db->get();
+      $result = $query->result();
+
+      if ($result) {
+         return $query;
+      } else {
+         return $query;
+      }
    }
 }
