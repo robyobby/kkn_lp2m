@@ -335,10 +335,12 @@
          // Perbarui setiap 1 detik
          setTimeout(updateCountdown, 1000);
       }
-
       // Panggil fungsi updateCountdown() untuk pertama kali
       updateCountdown();
    </script>
+
+
+
 </body>
 
 </html>

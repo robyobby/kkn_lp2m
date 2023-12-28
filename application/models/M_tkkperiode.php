@@ -71,11 +71,43 @@ class M_tkkperiode extends CI_Model
       $this->db->update('tkk_master_tahap', $params);
    }
 
-   public function dataTKK_aktif($status_aktif)
+   public function dataTKK_aktif($kode_tkk_tahap)
    {
       $this->db->select('*');
       $this->db->from('view_tkk_daftar');
-      $this->db->where('status_aktif_tkk_daftar', $status_aktif);
+      $this->db->where('kode_tkk_tahap', $kode_tkk_tahap);
+      $query = $this->db->get();
+      $result = $query->result();
+
+      if ($result) {
+         return $query;
+      } else {
+         return $query;
+      }
+   }
+
+   public function dataTKK_filter($kode_tkk_tahap)
+   {
+      $this->db->select('*');
+      $this->db->from('view_tkk_daftar');
+      $this->db->where('kode_tkk_tahap', $kode_tkk_tahap);
+      $this->db->where('kode_dosen IS NOT NULL');
+      $query = $this->db->get();
+      $result = $query->result();
+
+      if ($result) {
+         return $query;
+      } else {
+         return $query;
+      }
+   }
+
+   public function dataTKK_filterNULL($kode_tkk_tahap)
+   {
+      $this->db->select('*');
+      $this->db->from('view_tkk_daftar');
+      $this->db->where('kode_tkk_tahap', $kode_tkk_tahap);
+      $this->db->where('kode_dosen IS NULL');
       $query = $this->db->get();
       $result = $query->result();
 

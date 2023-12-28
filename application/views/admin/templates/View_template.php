@@ -358,6 +358,63 @@
       })
    </script>
 
+   <script>
+      $(document).ready(function() {
+         var dataTable = $('#myDataTable').DataTable();
+
+         // Pilih semua checkbox
+         $('#selectAll').on('change', function() {
+            $('.data-checkbox').prop('checked', this.checked);
+         });
+
+         // Diperbarui ketika checkbox diubah
+         $('#myDataTable tbody').on('change', '.data-checkbox', function() {
+            if (!this.checked) {
+               $('#selectAll').prop('checked', false);
+            } else {
+               // Cek apakah semua checkbox dicentang
+               var allChecked = $('.data-checkbox:checked').length === $('.data-checkbox').length;
+               $('#selectAll').prop('checked', allChecked);
+            }
+         });
+
+         // Tombol untuk membuka modal
+         $('#openModalBtn').on('click', function() {
+            // Mengumpulkan data dari baris yang dicentang
+            var selectedData = [];
+            $('.data-checkbox:checked').each(function() {
+               var rowData = dataTable.row($(this).closest('tr')).data();
+               selectedData.push(rowData);
+            });
+
+            // Memeriksa apakah ada data yang dicentang
+            if (selectedData.length > 0) {
+               // Menampilkan data yang dicentang dalam modal (contoh)
+               var modalContent = '<ul>';
+               for (var i = 0; i < selectedData.length; i++) {
+                  modalContent += '<li>NIM: ' + selectedData[i][3] + ', Nama: ' + selectedData[i][4] + '</li>';
+               }
+               modalContent += '</ul>';
+
+               Swal.fire({
+                  title: 'Data yang Dicentang',
+                  html: modalContent,
+                  icon: 'info',
+                  confirmButtonText: 'OK'
+               });
+            } else {
+               // Tampilkan pesan bahwa tidak ada data yang dicentang
+               Swal.fire({
+                  title: 'Peringatan',
+                  text: 'Pilih setidaknya satu data untuk membuka modal.',
+                  icon: 'warning',
+                  confirmButtonText: 'OK'
+               });
+            }
+         });
+      });
+   </script>
+
 </body>
 
 </html>
