@@ -79,7 +79,7 @@
                 <div class="clearfix"></div>
               </div>
               <div class="x_content">
-                <form class="form-horizontal form-label-left" action="<?= site_url('Datatkkperiode/tambah_tkkperiode') ?>" method="POST">
+                <form class="form-horizontal form-label-left" action="s" method="POST">
                   <?php
                   foreach ($semesterrow as $row => $data) : ?>
                     <div class="item form-group">

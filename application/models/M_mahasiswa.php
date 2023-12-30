@@ -35,6 +35,21 @@ class M_mahasiswa extends CI_Model
       }
    }
 
+   public function datadosen($status_aktif)
+   {
+      $this->db->select('*');
+      $this->db->from('master_dosen');
+      $this->db->where_in('status_aktif', $status_aktif);
+      $query = $this->db->get();
+      $result = $query->result();
+
+      if ($result) {
+         return $query;
+      } else {
+         return $query;
+      }
+   }
+
    public function tambah_mahasiswa($post)
    {
       $this->db->insert('master_mahasiswa', $post);

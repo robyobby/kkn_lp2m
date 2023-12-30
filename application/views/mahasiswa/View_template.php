@@ -15,6 +15,8 @@
    <link href="<?= base_url() ?>assets/vendors/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
    <!-- Font Awesome -->
    <link href="<?= base_url() ?>assets/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+   <!-- JQuery -->
+   <link href="<?= base_url() ?>assets/vendors/jquery/dist/jquery-ui.css" rel="stylesheet">
    <!-- NProgress -->
    <link href="<?= base_url() ?>assets/vendors/nprogress/nprogress.css" rel="stylesheet">
    <!-- Sweetalert -->
@@ -108,7 +110,9 @@
    </div>
 
    <!-- jQuery -->
-   <script src="<?= base_url() ?>assets/vendors/jquery/dist/jquery.min.js"></script>
+   <!-- <script src="<?= base_url() ?>assets/vendors/jquery/dist/jquery.min.js"></script> -->
+   <script src="<?= base_url() ?>assets/vendors/jquery/dist/jquery3.7.1.min.js"></script>
+   <script src="<?= base_url() ?>assets/vendors/jquery/dist/jquery-ui.js"></script>
    <!-- Bootstrap -->
    <script src="<?= base_url() ?>assets/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
    <!-- FastClick -->
