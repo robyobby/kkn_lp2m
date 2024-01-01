@@ -4,8 +4,9 @@
       <div class="row">
          <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
+            <?= $this->session->flashdata('pesan'); ?>
                <div class="x_title">
-                  <h2>Data Mahasiswa TKK </h2>
+                  <h2>Data Mahasiswa TKK </h2> 
                   <ul class="nav navbar-right panel_toolbox">
                      <li>
                         <button class="btn btn-success btn-sm" type="button" id="downloadTemplate" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-download"></i> Template <span class="caret"></span></button>
@@ -18,7 +19,12 @@
                               <li><button type="submit" class="btn btn-link")><i class="fa fa-users"></i> Dosen</a></li>
                            </form>
                         </ul>
-                        <button class="btn btn-success btn-sm" type="button" id="importTemplate"><i class="fa fa-recycle"></i> Import</button>
+                     </li>
+                     <li>
+                        <form action="<?= site_url('ValidasiTKK/importValidasi') ?>" method="POST" enctype="multipart/form-data">
+                           <button class="btn btn-success btn-sm" type="submit" id="importTemplate"><i class="fa fa-recycle"></i> Import</button>
+                           <input type="file" name="excel_file" accept=".xls, .xlsx">
+                        </form>
                      </li>
                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                      </li>
@@ -37,6 +43,7 @@
                         </select>
                         <button class="btn btn-primary btn-sm" type="submit" id="bukaModal"><i class="fa fa-filter"></i> Filter</button>
                      </div>
+                     <input type="text" id="cari_dosen" name="cari_dosen" class="form-control col-md-7 col-xs-12" placeholder="Cari Dosen....." required>
                      <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
@@ -57,24 +64,24 @@
                         <tbody>
                            <?php
                            $no = 1;
-                           foreach ($dataTKKaktif as  $row => $data) : ?>
+                           foreach ($dataTKKaktif as  $row => $item) : ?>
                               <tr>
                                  <td class="text-center"> <?= $no++; ?>.</td>
                                  <td>
-                                    <?= $data['nim']; ?> <br>
+                                    <?= $item -> nim; ?> <br>
                                     <?php
-                                    if ($data['kode_dosen'] == null) { ?>
+                                    if ($item->kode_dosen == null) { ?>
                                        <div class="label label-warning">Belum ada penguji</div>
                                     <?php } else { ?>
-                                       <div class="label label-info">Non Aktif</div>
+                                       <div class="label label-info">Sudah ada penguji</div>
                                     <?php } ?>
                                  </td>
-                                 <td style="display: none;"><?= $data['nim']; ?></td>
-                                 <td><?= $data['nama']; ?></td>
-                                 <td><?= $data['tanggal_daftar']; ?></td>
-                                 <td>(<?= $data['fakultas']; ?>)<br><?= $data['prodi']; ?></td>
-                                 <td><?= $data['notelp']; ?></td>
-                                 <td><a class="btn btn-warning btn-xs" id="tombolvalidasitkk" data-toggle="modal" data-target="#modal-validasitkk" data-kode_tkk_daftar="<?= $data['kode_tkk_daftar'] ?>" data-kode_dosen="<?= $data['kode_dosen'] ?>" data-nim="<?= $data['nim'] ?>" data-nama="<?= $data['nama'] ?>" data-fakultas="<?= $data['fakultas'] ?>" data-prodi="<?= $data['prodi'] ?>"><i class="fa fa-edit"></i></a></td>
+                                 <td style="display: none;"><?= $item->nim; ?></td>
+                                 <td><?= $item->nama; ?></td>
+                                 <td><?= $item->tanggal_daftar; ?></td>
+                                 <td>(<?= $item->fakultas; ?>)<br><?= $item->prodi; ?></td>
+                                 <td><?= $item->notelp; ?></td>
+                                 <td><a class="btn btn-warning btn-xs" id="tombolvalidasitkk" data-toggle="modal" data-target="#modal-validasitkk" data-kode_tkk_daftar="<?= $item->kode_tkk_daftar ?>" data-kode_dosen="<?= $item->kode_dosen ?>" data-nim="<?= $item->nim ?>" data-nama="<?= $item->nama ?>" data-fakultas="<?= $item->fakultas ?>" data-prodi="<?= $item->prodi ?>"><i class="fa fa-edit"></i></a></td>
                               </tr>
                            <?php endforeach; ?>
                         </tbody>
@@ -88,51 +95,62 @@
 </div>
 <!-- /page content -->
 
-<div class="modal fade" id="modal-edittahapantkk" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="modal-validasitkk" tabindex="-1" role="dialog" aria-hidden="true">
    <div class="modal-dialog modal-lg">
       <div class="modal-content">
          <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
          </div>
-         <div class="modal-body" id="edittahapantkk">
+         <div class="modal-body" id="validasitkk">
             <div class="x_title">
-               <h2>Edit Tahapan TKK <small>Administrator</small></h2>
+               <h2>Tambahkan Penguji <small>Administrator</small></h2>
                <div class="clearfix"></div>
             </div>
             <div class="x_content form-horizontal form-label-left">
-               <form action="<?= site_url('Datatkkperiode/edit_tkkperiode') ?>" method="POST">
+               <form action="<?= site_url('ValidasiTKK/tambah_penguji') ?>" method="POST">
                   <div class="item form-group">
-                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Semester <span class="required">*</span></label>
+                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nim">NIM <span class="required">*</span></label>
                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input type="text" id="semester_ta" name="semester_ta" class="form-control col-md-7 col-xs-12" readonly>
-                        <input type="hidden" id="kode_tkk_tahap" name="kode_tkk_tahap" readonly required>
-                        <input type="hidden" id="kode_semester" name="kode_semester" readonly required>
-                        <input type="hidden" id="status_aktif_tahapan_tkk" name="status_aktif" readonly required>
+                        <input type="text" id="nim" name="nim" class="form-control col-md-7 col-xs-12" readonly>
+                        <input type="hidden" id="kode_tkk_daftar" name="kode_tkk_tahap" readonly required>
                      </div>
                   </div>
                   <div class="item form-group">
-                     <label  label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Tahapan ke - <span class="required">*</span></label>
+                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nama">Nama <span class="required">*</span></label>
                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        <select class="form-control" name="tahap_ke" id="tahap_ke" required>
-                           <option>-Pilih Tahap TKK-</option>
-                           <option value="1">1</option>
-                           <option value="2">2</option>
-                           <option value="3">3</option>
-                           <option value="4">4</option>
-                        </select>
+                        <input type="text" id="nama" name="nama" class="form-control col-md-7 col-xs-12" readonly>
                      </div>
                   </div>
                   <div class="item form-group">
-                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="waktu_pembukaan">Waktu Pembukaan<span class="required">*</span></label>
-                     <div class="col-md-3 col-sm-3 col-xs-3">
-                        <input type="datetime-local" id="waktu_pembukaan" name="waktu_pembukaan" class="form-control col-md-6 col-xs-6" required>
+                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="fakultas">Fakultas <span class="required">*</span></label>
+                     <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input type="text" id="fakultas" name="fakultas" class="form-control col-md-7 col-xs-12" readonly>
                      </div>
                   </div>
                   <div class="item form-group">
-                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="waktu_penutupan">Waktu Penutupan<span class="required">*</span>
-                     </label>
-                     <div class="col-md-3 col-sm-3 col-xs-3">
-                        <input type="datetime-local" id="waktu_penutupan" name="waktu_penutupan" class="form-control col-md-6 col-xs-6" required>
+                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="prodi">Program Studi <span class="required">*</span></label>
+                     <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input type="text" id="prodi" name="prodi" class="form-control col-md-7 col-xs-12" readonly>
+                     </div>
+                  </div>
+                  <div class="ln_solid"></div>
+                  <div class="item form-group">
+                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="cari_dosen">Nama Dosen <span class="required">*</span></label>
+                     <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input type="text" id="cari_dosen" name="cari_dosen" class="form-control col-md-7 col-xs-12" placeholder="Cari Dosen....." required>
+                        <input type="hidden" id="kode_dosen" name="kode_dosen" class="form-control col-md-7 col-xs-12" readonly>
+                     </div>
+                  </div>
+                  <div class="item form-group">
+                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nip">NIP <span class="required">*</span></label>
+                     <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input type="text" id="nip" name="nip" class="form-control col-md-7 col-xs-12" readonly>
+                     </div>
+                  </div>
+                  <div class="item form-group">
+                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="jabatan">Jabatan <span class="required">*</span></label>
+                     <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input type="text" id="jabatan" name="jabatan" class="form-control col-md-7 col-xs-12" readonly>
                      </div>
                   </div>
                   <div class="ln_solid"></div>

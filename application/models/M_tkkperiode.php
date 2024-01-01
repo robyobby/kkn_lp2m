@@ -86,6 +86,21 @@ class M_tkkperiode extends CI_Model
       }
    }
 
+   public function dataTKK_aktifDosen($kode_tkk_tahap)
+   {
+      $this->db->select('*');
+      $this->db->from('view_tkk_daftar_dosen');
+      $this->db->where('kode_tkk_tahap', $kode_tkk_tahap);
+      $query = $this->db->get();
+      $result = $query->result();
+
+      if ($result) {
+         return $query;
+      } else {
+         return $query;
+      }
+   }
+
    public function dataTKK_filter($kode_tkk_tahap)
    {
       $this->db->select('*');

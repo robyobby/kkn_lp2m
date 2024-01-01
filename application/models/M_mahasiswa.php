@@ -65,4 +65,20 @@ class M_mahasiswa extends CI_Model
       $this->db->where('nim', $nim);
       $this->db->update('master_mahasiswa', $post);
    }
+
+   public function update_dataDosen($data, $where) {
+      // $data: Array berisi data yang akan di-update
+      // $where: Array atau string berisi klausa WHERE
+
+      // Contoh update data
+      $this->db->update('tkk_daftar', $data, $where);
+   }
+
+   public function cariDosen($nama)
+   {
+      $this->db->like('nama',$nama,'BOTH');
+      $this->db->order_by('nama', 'ASC');
+      $this->db->limit(10);
+      return $this->db->get('master_dosen')->result();
+   }
 }

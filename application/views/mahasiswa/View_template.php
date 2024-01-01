@@ -112,7 +112,6 @@
    <!-- jQuery -->
    <!-- <script src="<?= base_url() ?>assets/vendors/jquery/dist/jquery.min.js"></script> -->
    <script src="<?= base_url() ?>assets/vendors/jquery/dist/jquery3.7.1.min.js"></script>
-   <script src="<?= base_url() ?>assets/vendors/jquery/dist/jquery-ui.js"></script>
    <!-- Bootstrap -->
    <script src="<?= base_url() ?>assets/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
    <!-- FastClick -->
@@ -342,8 +341,6 @@
       // Panggil fungsi updateCountdown() untuk pertama kali
       updateCountdown();
    </script>
-
-
 
 </body>
 

@@ -27,6 +27,7 @@
    <link href="<?= base_url() ?>assets/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
    <!-- JQVMap -->
    <link href="<?= base_url() ?>assets/vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet" />
+   <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
    <!-- bootstrap-daterangepicker -->
    <link href="<?= base_url() ?>assets/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
    <!-- Custom Theme Style -->
@@ -122,6 +123,8 @@
 
    <!-- jQuery -->
    <script src="<?= base_url() ?>assets/vendors/jquery/dist/jquery.min.js"></script>
+   <script src="<?= base_url() ?>assets/vendors/jquery/dist/jquery-ui.js"></script>
+   <!-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
    <!-- Bootstrap -->
    <script src="<?= base_url() ?>assets/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
    <!-- FastClick -->
@@ -360,58 +363,46 @@
 
    <script>
       $(document).ready(function() {
-         var dataTable = $('#myDataTable').DataTable();
+         $(document).on('click', '#tombolvalidasitkk', function() {
+            var kode_kkn_daftar = $(this).data('kode_kkn_daftar');
+            var nim = $(this).data('nim');
+            var nama = $(this).data('nama');
+            var fakultas = $(this).data('fakultas');
+            var prodi = $(this).data('prodi');
+            $('#validasitkk #kode_kkn_daftar').val(kode_kkn_daftar);
+            $('#validasitkk #nim').val(nim);
+            $('#validasitkk #nama').val(nama);
+            $('#validasitkk #fakultas').val(fakultas);
+            $('#validasitkk #prodi').val(prodi);
+         })
+      })
+   </script>
 
-         // Pilih semua checkbox
-         $('#selectAll').on('change', function() {
-            $('.data-checkbox').prop('checked', this.checked);
-         });
-
-         // Diperbarui ketika checkbox diubah
-         $('#myDataTable tbody').on('change', '.data-checkbox', function() {
-            if (!this.checked) {
-               $('#selectAll').prop('checked', false);
-            } else {
-               // Cek apakah semua checkbox dicentang
-               var allChecked = $('.data-checkbox:checked').length === $('.data-checkbox').length;
-               $('#selectAll').prop('checked', allChecked);
-            }
-         });
-
-         // Tombol untuk membuka modal
-         $('#openModalBtn').on('click', function() {
-            // Mengumpulkan data dari baris yang dicentang
-            var selectedData = [];
-            $('.data-checkbox:checked').each(function() {
-               var rowData = dataTable.row($(this).closest('tr')).data();
-               selectedData.push(rowData);
+   <script>
+      $(function() {
+         $("#cari_dosen2").autocomplete({
+            source: function(request, response) {
+               $.ajax({
+                     url: "<?php echo base_url('ValidasiTKK/searchAutoComplete2'); ?>",
+                     dataType: "json",
+                     data: {
+                     term: request.term
+                     },
+                     success: function(data) {
+                     response(data);
+                     }
+                  });
+               },
+                minLength: 2 // Jumlah karakter minimal sebelum pencarian dimulai
             });
+      });
+   </script>
 
-            // Memeriksa apakah ada data yang dicentang
-            if (selectedData.length > 0) {
-               // Menampilkan data yang dicentang dalam modal (contoh)
-               var modalContent = '<ul>';
-               for (var i = 0; i < selectedData.length; i++) {
-                  modalContent += '<li>NIM: ' + selectedData[i][3] + ', Nama: ' + selectedData[i][4] + '</li>';
-               }
-               modalContent += '</ul>';
-
-               Swal.fire({
-                  title: 'Data yang Dicentang',
-                  html: modalContent,
-                  icon: 'info',
-                  confirmButtonText: 'OK'
-               });
-            } else {
-               // Tampilkan pesan bahwa tidak ada data yang dicentang
-               Swal.fire({
-                  title: 'Peringatan',
-                  text: 'Pilih setidaknya satu data untuk membuka modal.',
-                  icon: 'warning',
-                  confirmButtonText: 'OK'
-               });
-            }
-         });
+   <script>
+      $(document).ready(function() {
+         $("#cari_dosen").autocomplete({
+            source : "<?php echo base_url('ValidasiTKK/searchAutoComplete'); ?>"
+         })
       });
    </script>
 
