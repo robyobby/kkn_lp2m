@@ -27,7 +27,7 @@
    <link href="<?= base_url() ?>assets/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
    <!-- JQVMap -->
    <link href="<?= base_url() ?>assets/vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet" />
-   <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
+   <link href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
    <!-- bootstrap-daterangepicker -->
    <link href="<?= base_url() ?>assets/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
    <!-- Custom Theme Style -->
@@ -58,6 +58,7 @@
                         <li><a><i class="fa fa-desktop"></i> Data Master <span class="fa fa-chevron-down"></span></a>
                            <ul class="nav child_menu">
                               <li><a href="<?= base_url('Datauser') ?>"><i class="fa fa-user"></i> User <span class="fa fa-chevron"></span></a>
+                              <li><a href="<?= base_url('Datadosen') ?>"><i class="fa fa-user"></i> Dosen <span class="fa fa-chevron"></span></a>
                               <li><a href="<?= base_url('Dataperiode') ?>"><i class="fa fa-calendar"></i> Periode <span class="fa fa-chevron"></span></a>
                               <li><a><i class="fa fa-calendar-o"></i> Data Tahapan <span class="fa fa-chevron-down"></span></a>
                                  <ul class="nav child_menu">
@@ -123,8 +124,8 @@
 
    <!-- jQuery -->
    <script src="<?= base_url() ?>assets/vendors/jquery/dist/jquery.min.js"></script>
-   <script src="<?= base_url() ?>assets/vendors/jquery/dist/jquery-ui.js"></script>
-   <!-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
+   <script src="<?= base_url() ?>assets/vendors/jquery-3.7.1/jquery-ui.js"></script>
+   <!-- <script src="https://code.jquery.com/jquery-3.6.4.js"></script> -->
    <!-- Bootstrap -->
    <script src="<?= base_url() ?>assets/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
    <!-- FastClick -->
@@ -363,49 +364,79 @@
 
    <script>
       $(document).ready(function() {
-         $(document).on('click', '#tombolvalidasitkk', function() {
-            var kode_kkn_daftar = $(this).data('kode_kkn_daftar');
-            var nim = $(this).data('nim');
-            var nama = $(this).data('nama');
-            var fakultas = $(this).data('fakultas');
-            var prodi = $(this).data('prodi');
-            $('#validasitkk #kode_kkn_daftar').val(kode_kkn_daftar);
-            $('#validasitkk #nim').val(nim);
-            $('#validasitkk #nama').val(nama);
-            $('#validasitkk #fakultas').val(fakultas);
-            $('#validasitkk #prodi').val(prodi);
-         })
-      })
-   </script>
+      // Open Modal
+      $(document).on('click', '#tombolvalidasitkk', function() {
+         var kode_tkk_daftar = $(this).data('kode_tkk_daftar');
+         var nim = $(this).data('nim');
+         var nama = $(this).data('nama');
+         var fakultas = $(this).data('fakultas');
+         var prodi = $(this).data('prodi');
+         $('#validasitkk #kode_tkk_daftar').val(kode_tkk_daftar);
+         $('#validasitkk #nim').val(nim);
+         $('#validasitkk #nama').val(nama);
+         $('#validasitkk #fakultas').val(fakultas);
+         $('#validasitkk #prodi').val(prodi);
+         $("#modal-validasitkk").show();
+         });
 
-   <script>
-      $(function() {
-         $("#cari_dosen2").autocomplete({
+         // Close Modal
+         $(".close").click(function() {
+         $("#modal-validasitkk").hide();
+         });
+
+         // Autocomplete
+         $("#validasitkk #cari_dosen").autocomplete({
             source: function(request, response) {
+               // var cari_dosen = $(this).data('cari_dosen');
                $.ajax({
-                     url: "<?php echo base_url('ValidasiTKK/searchAutoComplete2'); ?>",
-                     dataType: "json",
-                     data: {
-                     term: request.term
-                     },
-                     success: function(data) {
-                     response(data);
+                  Type: "POST",
+                  url: "<?php echo base_url('ValidasiTKK/searchAutoComplete'); ?>",
+                  dataType: "json",
+                  data: {
+                           keyword: $("#validasitkk #cari_dosen").val()
+                        },
+                  success: function(data) {
+                     if (data.length > 0) {
+                        $('#validasitkk #dropdownDosen').empty();
+                        $('#validasitkk #cari_dosen').attr("data-toggle", "dropdown");
+                        $('#validasitkk #dropdownDosen').dropdown('toggle');
+                     } else if (data.length == 0) {
+                        $('#validasitkk #cari_dosen').attr("data-toggle", "");
+                     }
+                     $.each(data, function (key,value) {
+                     if (data.length >= 0){
+                        $('#validasitkk #dropdownDosen').append('<li role="presentation" ><a role="menuitem dropdownnameli" data-id="' + value['kode_dosen'] +'" data-nip="' + value['nip'] +'" data-jabatan="' + value['jabatan'] +'" style="cursor: pointer;" class="dropdownlivalue">'+ value['nama'] + '</a></li>');
+                     }
+
+                     });
                      }
                   });
                },
-                minLength: 2 // Jumlah karakter minimal sebelum pencarian dimulai
+               minLength: 2
+            });
+            $('ul#dropdownDosen').on('click', 'li a', function () {
+            $('#validasitkk #cari_dosen').val($(this).text());
+            $('#validasitkk #kode_dosen').val($(this).attr("data-id"));
+
+            // DEBUG, display value on screen 
+            $('#validasitkk #nip').html( $(this).attr("data-nip") );
+            $('#validasitkk #jabatan').html( $(this).attr("data-jabatan") );
+            $('ul#dropdownDosen').hide();
             });
       });
    </script>
 
    <script>
       $(document).ready(function() {
-         $("#cari_dosen").autocomplete({
-            source : "<?php echo base_url('ValidasiTKK/searchAutoComplete'); ?>"
+         $(document).on('click', '#tombolsertifikat', function() {
+            var lulus = $(this).data('lulus');
+            var tidaklulus = $(this).data('tidaklulus');
+            $('#sertifikat #lulus').val(lulus);
+            $('#sertifikat #tidaklulus').val(tidaklulus);
          })
-      });
+      })
    </script>
-
+   
 </body>
 
 </html>
