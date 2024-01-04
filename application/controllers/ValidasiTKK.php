@@ -18,16 +18,7 @@ class ValidasiTKK extends CI_Controller
       $status_kelulusan = 'l';
       $data['TahapAktif'] = $this->M_tkkperiode->ambil_baris_tkk_tahap($status_aktif)->row_array();
       $kode_tkk_tahap = $data['TahapAktif']['kode_tkk_tahap'];
-
-      $cekDataDosenAda = $this->M_tkkperiode->cekDataDosenAda($kode_tkk_tahap)->row_array();
-      // print_r($cekDataDosenAda);
-      if (empty($cekDataDosenAda))
-      {
-         $dataTKKaktif = $this->M_tkkperiode->dataTKK_aktif($kode_tkk_tahap)->result();
-      } else {
-         $dataTKKaktif = $this->M_tkkperiode->dataTKK_aktifDosen($kode_tkk_tahap)->result();
-      }
-      // $dataTKKaktif = $this->M_tkkperiode->dataTKK_aktif($kode_tkk_tahap)->result();
+      $dataTKKaktif = $this->M_tkkperiode->dataTKK_aktif($kode_tkk_tahap)->result();
       $cekKelulusan = $this->M_tkkperiode->cekKelulusan($kode_tkk_tahap)->row_array();
       $jumlahMahasiswaLulus = $this->M_tkkperiode->dataMahasiswaLulus($kode_tkk_tahap);
       $jumlahMahasiswaTidakLulus = $this->M_tkkperiode->dataMahasiswaTidakLulus($kode_tkk_tahap);
@@ -41,7 +32,6 @@ class ValidasiTKK extends CI_Controller
          'jumlahMahasiswaTidakLulus' => $jumlahMahasiswaTidakLulus,
          'dataTKKlulus' => $dataTKKlulus
       ];
-      // print_r($data['dataTKKlulus'][1]);
       $this->template->load('admin/templates/View_template', 'admin/master/View_validasitkk', $data);
    }
 

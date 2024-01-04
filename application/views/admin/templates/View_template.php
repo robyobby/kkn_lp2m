@@ -228,6 +228,24 @@
          })
       })
 
+      $('.btn-hapusDosen').on('click', function(e) {
+         e.preventDefault();
+         Swal.fire({
+            title: 'Yakin ingin dihapus?',
+            text: "Data akan terhapus apabila memilih ya!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Batal',
+            confirmButtonText: 'Ya, Hapus!'
+         }).then((result) => {
+            if (result.value) {
+               document.getElementById('hapusDosen').submit();
+            }
+         })
+      })
+
       $('.btn-valid').on('click', function(e) {
          e.preventDefault();
          const href = $(this).attr('href');

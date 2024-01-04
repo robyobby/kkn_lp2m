@@ -95,25 +95,27 @@
                                  <td class="text-center"> <?= $no++; ?>.</td>
                                  <td>
                                     <?= $item -> nim; ?> <br>
-                                    <?php if (empty($cekDataDosenAda)) { ?>
                                        <?php
                                        if ($item->kode_dosen == null) { ?>
                                           <div class="label label-warning">Belum ada penguji</div>
                                        <?php } else { ?>
-                                          <div class="label label-info"><?= $item->nama_dosen ?></div>
-                                       <?php } ?>
-                                    <?php } else { ?>
                                           <div class="label label-info">Sudah ada penguji</div>
-                                    <?php } ?>
+                                       <?php } ?>
                                  </td>
                                  <td style="display: none;"><?= $item->nim; ?></td>
                                  <td>
-                                    <?= $item->nama_mahasiswa; ?> <br>
+                                    <?= $item->nama; ?> <br>
                                     <?php
                                     if ($item->status_lulus == "tg") { ?>
                                        <div class="label label-warning">Belum ada nilai</div>
                                     <?php } elseif ($item->status_lulus == "l") { ?>
                                        <div class="label label-info">Lulus</div>
+                                       <?php
+                                       if ($item->no_sertifikat == null) { ?>
+                                          <div class="label label-warning">Belum ada sertifikat</div>
+                                       <?php } else { ?>
+                                          <div class="label label-info">Sudah ada sertifikat</div>
+                                       <?php } ?>   
                                     <?php } elseif ($item->status_lulus == "tl") { ?>
                                        <div class="label label-danger">Tidak Lulus</div>
                                     <?php } ?>
@@ -121,7 +123,7 @@
                                  <td><?= $item->tanggal_daftar; ?></td>
                                  <td>(<?= $item->fakultas; ?>)<br><?= $item->prodi; ?></td>
                                  <td><?= $item->notelp; ?></td>
-                                 <td><a class="btn btn-warning btn-xs" id="tombolvalidasitkk" data-kode_tkk_daftar="<?= $item->kode_tkk_daftar ?>" data-kode_dosen="<?= $item->kode_dosen ?>" data-nim="<?= $item->nim ?>" data-nama="<?= $item->nama_mahasiswa ?>" data-fakultas="<?= $item->fakultas ?>" data-prodi="<?= $item->prodi ?>"><i class="fa fa-edit"></i></a></td>
+                                 <td><a class="btn btn-warning btn-xs" id="tombolvalidasitkk" data-kode_tkk_daftar="<?= $item->kode_tkk_daftar ?>" data-kode_dosen="<?= $item->kode_dosen ?>" data-nim="<?= $item->nim ?>" data-nama="<?= $item->nama ?>" data-fakultas="<?= $item->fakultas ?>" data-prodi="<?= $item->prodi ?>"><i class="fa fa-edit"></i></a></td>
                               </tr>
                            <?php endforeach; ?>
                         </tbody>

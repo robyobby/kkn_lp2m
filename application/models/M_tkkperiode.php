@@ -44,22 +44,6 @@ class M_tkkperiode extends CI_Model
       }
    }
 
-   public function cekDataDosenAda($kode_tkk_tahap)
-   {
-      $this->db->select('*');
-      $this->db->from('view_tkk_daftar');
-      $this->db->where('kode_tkk_tahap', $kode_tkk_tahap);
-      $this->db->where('kode_dosen IS NOT NULL');
-      $this->db->order_by('nama_mahasiswa', 'ASC');
-      $query = $this->db->get();
-      $result = $query->result();
-      if ($result) {
-         return $query;
-      } else {
-         return $query;
-      }
-   }
-
    public function gabungbaris($kode_semester)
    {
       $this->db->where('kode_semester', $kode_semester);
@@ -98,7 +82,7 @@ class M_tkkperiode extends CI_Model
       $this->db->select('*');
       $this->db->from('view_tkk_daftar');
       $this->db->where('kode_tkk_tahap', $kode_tkk_tahap);
-      $this->db->order_by('nama_mahasiswa', 'ASC');
+      $this->db->order_by('nama', 'ASC');
       $query = $this->db->get();
       $result = $query->result();
 
@@ -115,7 +99,7 @@ class M_tkkperiode extends CI_Model
       $this->db->from('view_tkk_daftar');
       $this->db->where('kode_tkk_tahap', $kode_tkk_tahap);
       $this->db->where('status_lulus', $status_kelulusan);
-      $this->db->order_by('nama_mahasiswa', 'ASC');
+      $this->db->order_by('nama', 'ASC');
       $query = $this->db->get();
       $result = $query->result();
 
@@ -149,7 +133,7 @@ class M_tkkperiode extends CI_Model
       $this->db->where('kode_tkk_tahap', $kode_tkk_tahap);
       $this->db->where('kode_dosen IS NOT NULL');
       $this->db->where('status_lulus', $status);
-      $this->db->order_by('nama_mahasiswa', 'ASC');
+      $this->db->order_by('nama', 'ASC');
       $query = $this->db->get();
       $result = $query->result();
 
@@ -167,7 +151,7 @@ class M_tkkperiode extends CI_Model
       $this->db->where('kode_tkk_tahap', $kode_tkk_tahap);
       $this->db->where('kode_dosen IS NULL');
       $this->db->where('status_lulus', $status);
-      $this->db->order_by('nama_mahasiswa', 'ASC');
+      $this->db->order_by('nama', 'ASC');
       $query = $this->db->get();
       $result = $query->result();
 
