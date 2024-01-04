@@ -22,9 +22,6 @@
                            <form action="<?= site_url('ValidasiTKK/excelMahasiswa') ?>" method="POST">
                               <li><button type="submit" class="btn btn-link")><i class="fa fa-user"></i> Mahasiswa</button></li>
                            </form>
-                           <form action="<?= site_url('ValidasiTKK/BlankoNilai') ?>" method="POST">
-                              <li><button type="submit" class="btn btn-link")><i class="fa fa-user"></i> Blanko Nilai</button></li>
-                           </form>
                            <form action="<?= site_url('ValidasiTKK/excelDosen') ?>" method="POST">
                               <li><button type="submit" class="btn btn-link")><i class="fa fa-users"></i> Dosen</a></li>
                            </form>
@@ -98,16 +95,20 @@
                                  <td class="text-center"> <?= $no++; ?>.</td>
                                  <td>
                                     <?= $item -> nim; ?> <br>
-                                    <?php
-                                    if ($item->kode_dosen == null) { ?>
-                                       <div class="label label-warning">Belum ada penguji</div>
+                                    <?php if (empty($cekDataDosenAda)) { ?>
+                                       <?php
+                                       if ($item->kode_dosen == null) { ?>
+                                          <div class="label label-warning">Belum ada penguji</div>
+                                       <?php } else { ?>
+                                          <div class="label label-info"><?= $item->nama_dosen ?></div>
+                                       <?php } ?>
                                     <?php } else { ?>
-                                       <div class="label label-info">Sudah ada penguji</div>
+                                          <div class="label label-info">Sudah ada penguji</div>
                                     <?php } ?>
                                  </td>
                                  <td style="display: none;"><?= $item->nim; ?></td>
                                  <td>
-                                    <?= $item->nama; ?> <br>
+                                    <?= $item->nama_mahasiswa; ?> <br>
                                     <?php
                                     if ($item->status_lulus == "tg") { ?>
                                        <div class="label label-warning">Belum ada nilai</div>
@@ -120,7 +121,7 @@
                                  <td><?= $item->tanggal_daftar; ?></td>
                                  <td>(<?= $item->fakultas; ?>)<br><?= $item->prodi; ?></td>
                                  <td><?= $item->notelp; ?></td>
-                                 <td><a class="btn btn-warning btn-xs" id="tombolvalidasitkk" data-kode_tkk_daftar="<?= $item->kode_tkk_daftar ?>" data-kode_dosen="<?= $item->kode_dosen ?>" data-nim="<?= $item->nim ?>" data-nama="<?= $item->nama ?>" data-fakultas="<?= $item->fakultas ?>" data-prodi="<?= $item->prodi ?>"><i class="fa fa-edit"></i></a></td>
+                                 <td><a class="btn btn-warning btn-xs" id="tombolvalidasitkk" data-kode_tkk_daftar="<?= $item->kode_tkk_daftar ?>" data-kode_dosen="<?= $item->kode_dosen ?>" data-nim="<?= $item->nim ?>" data-nama="<?= $item->nama_mahasiswa ?>" data-fakultas="<?= $item->fakultas ?>" data-prodi="<?= $item->prodi ?>"><i class="fa fa-edit"></i></a></td>
                               </tr>
                            <?php endforeach; ?>
                         </tbody>
@@ -219,7 +220,7 @@
                <div class="clearfix"></div>
             </div>
             <div class="x_content form-horizontal form-label-left">
-               <form action="<?= site_url('ValidasiTKK/buat_sertifikat') ?>" method="POST">
+               <form action="<?= site_url('ValidasiTKK/BuatSertifikat') ?>" method="POST">
                   <div class="item form-group">
                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="lulus">Jumlah Mahasiswa Yang Lulus <span class="required">*</span></label>
                      <div class="col-md-6 col-sm-6 col-xs-12">

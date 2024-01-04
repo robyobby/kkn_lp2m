@@ -17,4 +17,16 @@ class Fungsi
         $user_data = $this->ci->M_user->datauser($kode_user)->row();
         return $user_data;
     }
+
+    function generateRandomString($length = 40) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
+        $randomString = '';
+    
+        for ($i = 0; $i < $length; $i++) {
+            $index = rand(0, strlen($characters) - 1);
+            $randomString .= $characters[$index];
+        }
+    
+        return $randomString;
+    }
 }

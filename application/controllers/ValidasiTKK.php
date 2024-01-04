@@ -15,21 +15,33 @@ class ValidasiTKK extends CI_Controller
    public function index()
    {
       $status_aktif = 1;
+      $status_kelulusan = 'l';
       $data['TahapAktif'] = $this->M_tkkperiode->ambil_baris_tkk_tahap($status_aktif)->row_array();
       $kode_tkk_tahap = $data['TahapAktif']['kode_tkk_tahap'];
-      $dataTKKaktif = $this->M_tkkperiode->dataTKK_aktif($kode_tkk_tahap)->result();
-      $dataTKKaktifDosen = $this->M_tkkperiode->dataTKK_aktifDosen($kode_tkk_tahap)->result_array();
+
+      $cekDataDosenAda = $this->M_tkkperiode->cekDataDosenAda($kode_tkk_tahap)->row_array();
+      // print_r($cekDataDosenAda);
+      if (empty($cekDataDosenAda))
+      {
+         $dataTKKaktif = $this->M_tkkperiode->dataTKK_aktif($kode_tkk_tahap)->result();
+      } else {
+         $dataTKKaktif = $this->M_tkkperiode->dataTKK_aktifDosen($kode_tkk_tahap)->result();
+      }
+      // $dataTKKaktif = $this->M_tkkperiode->dataTKK_aktif($kode_tkk_tahap)->result();
       $cekKelulusan = $this->M_tkkperiode->cekKelulusan($kode_tkk_tahap)->row_array();
       $jumlahMahasiswaLulus = $this->M_tkkperiode->dataMahasiswaLulus($kode_tkk_tahap);
       $jumlahMahasiswaTidakLulus = $this->M_tkkperiode->dataMahasiswaTidakLulus($kode_tkk_tahap);
+
+      $dataTKKlulus = $this->M_tkkperiode->dataTKK_lulus($kode_tkk_tahap, $status_kelulusan)->result_array();
+
       $data = [
          'dataTKKaktif' => $dataTKKaktif,
-         'dataTKKaktifDosen' => $dataTKKaktifDosen,
          'cekKelulusan' => $cekKelulusan,
          'jumlahMahasiswaLulus' => $jumlahMahasiswaLulus,
-         'jumlahMahasiswaTidakLulus' => $jumlahMahasiswaTidakLulus
+         'jumlahMahasiswaTidakLulus' => $jumlahMahasiswaTidakLulus,
+         'dataTKKlulus' => $dataTKKlulus
       ];
-      // print_r($data['jumlahMahasiswaLulus']);
+      // print_r($data['dataTKKlulus'][1]);
       $this->template->load('admin/templates/View_template', 'admin/master/View_validasitkk', $data);
    }
 
@@ -76,29 +88,27 @@ class ValidasiTKK extends CI_Controller
       }
 
       $sheet->setCellValue('A1', 'Nomor');
-      $sheet->setCellValue('B1', 'kode_mahasiswa');
+      $sheet->setCellValue('B1', 'kode_tkk_daftar');
       $sheet->setCellValue('C1', 'nim');
       $sheet->setCellValue('D1', 'nama');
       $sheet->setCellValue('E1', 'fakultas');
       $sheet->setCellValue('F1', 'prodi');
-      $sheet->setCellValue('J1', 'kode_tkk_daftar');
       $sheet->setCellValue('G1', 'kode_dosen');
-      $sheet->setCellValue('H1', 'status_lulus');
-      $sheet->setCellValue('I1', 'nilai_n1');
+      $sheet->setCellValue('H1', 'nilai_n1');
+      $sheet->setCellValue('I1', 'status_lulus');
 
       $row = 2;
       $no = 1;
       foreach ($data as $item) {
          $sheet->setCellValue('A' . $row, $no++);
-         $sheet->setCellValue('B' . $row, $item['kode_mahasiswa']);
+         $sheet->setCellValue('B' . $row, $item['kode_tkk_daftar']);
          $sheet->setCellValue('C' . $row, $item['nim']);
          $sheet->setCellValue('D' . $row, $item['nama']);
          $sheet->setCellValue('E' . $row, $item['fakultas']);
          $sheet->setCellValue('F' . $row, $item['prodi']);
-         $sheet->setCellValue('J' . $row, $item['kode_tkk_daftar']);
          $sheet->setCellValue('G' . $row, $item['kode_dosen']);
-         $sheet->setCellValue('H' . $row, $item['status_lulus']);
-         $sheet->setCellValue('I' . $row, $item['nilai_n1']);
+         $sheet->setCellValue('H' . $row, $item['nilai_n1']);
+         $sheet->setCellValue('I' . $row, $item['status_lulus']);
          // Add other columns as needed
          $row++;
       }
@@ -199,7 +209,7 @@ class ValidasiTKK extends CI_Controller
             );
 
             // Klausa WHERE
-            $where_condition = array('kode_tkk_daftar' => $row[9]);
+            $where_condition = array('kode_tkk_daftar' => $row[1]);
 
             // Panggil model untuk melakukan update
             $this->M_mahasiswa->update_dataDosen($update_data, $where_condition);
@@ -247,12 +257,12 @@ class ValidasiTKK extends CI_Controller
          foreach ($data as $row) {
             // Sesuaikan dengan struktur tabel dan kolom di database Anda
             $update_data = array(
-               'status_lulus' => $row[7],
-               'nilai_n1' => $row[8]
+               'status_lulus' => $row[8],
+               'nilai_n1' => $row[7]
             );
 
             // Klausa WHERE
-            $where_condition = array('kode_tkk_daftar' => $row[9]);
+            $where_condition = array('kode_tkk_daftar' => $row[1]);
 
             // Panggil model untuk melakukan update
             $this->M_mahasiswa->update_dataDosen($update_data, $where_condition);
@@ -286,51 +296,28 @@ class ValidasiTKK extends CI_Controller
       redirect('ValidasiTKK');
    }
 
-   public function exportToExcel() {
-      // Ambil data dari database atau sesuai kebutuhan filter
-      $data = $this->M_tkkperiode->BlankoNilaiPenguji(); // Gantilah dengan model dan metode yang sesuai
-
-      // Buat objek ZipArchive
-      $zip = new ZipArchive();
-
-      // Tentukan nama file zip
-      $zipFileName = 'excel_exports.zip';
-
-      // Buka file zip untuk penulisan
-      if ($zip->open($zipFileName, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
-         
-          // Loop melalui data dan buat file Excel untuk setiap data
-         foreach ($data as $row) {
-            $spreadsheet = new Spreadsheet();
-            $spreadsheet->getActiveSheet()->setCellValue('A1', 'Nama');
-            $spreadsheet->getActiveSheet()->setCellValue('B1', $row->nama); // Gantilah dengan nama kolom yang sesuai
-
-            // ... Tambahkan kolom-kolom lain sesuai kebutuhan
-            $writer = new Xlsx($spreadsheet);
-            $excelFileName = 'excel_export_' . $row->id . '.xlsx'; // Gantilah dengan nama file yang sesuai
-
-            // Simpan file Excel di dalam zip
-            $excelContent = $writer->writeToString();
-            $zip->addFromString($excelFileName, $excelContent);
-         }
-
-          // Tutup file zip
-         $zip->close();
-
-          // Set header untuk file zip
-         header('Content-Type: application/zip');
-         header('Content-disposition: attachment; filename=' . $zipFileName);
-         header('Content-Length: ' . filesize($zipFileName));
-         readfile($zipFileName);
-
-          // Hapus file zip setelah diunduh
-         unlink($zipFileName);
-
-      } else {
-         $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">
-			Gagal export ZIP </div>');
-         redirect ('ValidasiTKK');
+   public function BuatSertifikat()
+   {
+      $status_aktif = 1;
+      $status_kelulusan = 'l';
+      $data['TahapAktif'] = $this->M_tkkperiode->ambil_baris_tkk_tahap($status_aktif)->row_array();
+      $kode_tkk_tahap = $data['TahapAktif']['kode_tkk_tahap'];
+      $dataTKKlulus = $this->M_tkkperiode->dataTKK_lulus($kode_tkk_tahap, $status_kelulusan)->result_array();
+      $data = [
+         'dataTKKlulus' => $dataTKKlulus
+      ];
+      $tanggal_expired = $this->input->post('tanggal_expired');
+      foreach ($dataTKKlulus as $key => $item) {
+         $this->M_tkkperiode->editSertifikat(
+            $item['kode_tkk_daftar'],
+            [
+               'no_sertifikat' => $this->fungsi->generateRandomString(40),
+               'tanggal_expired' => $tanggal_expired
+            ]);
       }
+         if ($this->db->affected_rows() > 0) {
+            $this->session->set_flashdata('success', 'Data Berhasil Diubah !');
+         }
+      redirect('ValidasiTKK');
    }
-
 }
