@@ -125,7 +125,6 @@
    <!-- jQuery -->
    <script src="<?= base_url() ?>assets/vendors/jquery/dist/jquery.min.js"></script>
    <script src="<?= base_url() ?>assets/vendors/jquery-3.7.1/jquery-ui.js"></script>
-   <!-- <script src="https://code.jquery.com/jquery-3.6.4.js"></script> -->
    <!-- Bootstrap -->
    <script src="<?= base_url() ?>assets/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
    <!-- FastClick -->
@@ -193,6 +192,41 @@
 
    <!-- My JS -->
    <script>
+      // Fungsi untuk menampilkan SweetAlert
+      function showDeleteAlert(kode_dosen, nama) {
+         Swal.fire({
+            title: 'Konfirmasi Hapus',
+            text: 'Anda yakin ingin menghapus ' + nama + '?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal'
+         }).then((result) => {
+            if (result.isConfirmed) {
+               // Panggil fungsi hapus data di sini
+               window.location.href = '<?= base_url('Datadosen/hapus/'); ?>' + kode_dosen;
+            }
+         });
+      }
+
+      // Tangani klik tombol hapus
+      document.addEventListener('DOMContentLoaded', function() {
+         var btnDeletes = document.querySelectorAll('.btn-delete');
+
+         btnDeletes.forEach(function(btnDelete) {
+            btnDelete.addEventListener('click', function() {
+               // Ambil data ID dan Nama dari atribut data-*
+               var kode_dosen = this.getAttribute('data-kode_dosen');
+               var nama = this.getAttribute('data-nama');
+
+               // Tampilkan SweetAlert untuk konfirmasi hapus
+               showDeleteAlert(kode_dosen, nama);
+            });
+         });
+      });
+   </script>
+
+   <script>
       <?php if ($this->session->flashdata('success')) { ?>
          var isi = <?php echo json_encode($this->session->flashdata('success')) ?>;
          Swal.fire({
@@ -224,24 +258,6 @@
          }).then((result) => {
             if (result.value) {
                document.location.href = href;
-            }
-         })
-      })
-
-      $('.btn-hapusDosen').on('click', function(e) {
-         e.preventDefault();
-         Swal.fire({
-            title: 'Yakin ingin dihapus?',
-            text: "Data akan terhapus apabila memilih ya!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            cancelButtonText: 'Batal',
-            confirmButtonText: 'Ya, Hapus!'
-         }).then((result) => {
-            if (result.value) {
-               document.getElementById('hapusDosen').submit();
             }
          })
       })
@@ -321,6 +337,27 @@
 
    <script>
       $(document).ready(function() {
+         $(document).on('click', '#tomboleditdosen', function() {
+            var kode_dosen = $(this).data('kode_dosen');
+            var nama = $(this).data('nama');
+            var nidn = $(this).data('nidn');
+            var nip = $(this).data('nip');
+            var jabatan = $(this).data('jabatan');
+            var notelp = $(this).data('notelp');
+            var status_aktif = $(this).data('status_aktif');
+            $('#editdosen #kode_dosen').val(kode_dosen);
+            $('#editdosen #nama').val(nama);
+            $('#editdosen #nidn').val(nidn);
+            $('#editdosen #nip').val(nip);
+            $('#editdosen #jabatan').val(jabatan);
+            $('#editdosen #notelp').val(notelp);
+            $('#editdosen #status_aktif').val(status_aktif);
+         })
+      })
+   </script>
+
+   <script>
+      $(document).ready(function() {
          $(document).on('click', '#tomboleditperiode', function() {
             var kode_semester = $(this).data('kode_semester');
             var semester_akademik = $(this).data('semester_akademik');
@@ -382,24 +419,24 @@
 
    <script>
       $(document).ready(function() {
-      // Open Modal
-      $(document).on('click', '#tombolvalidasitkk', function() {
-         var kode_tkk_daftar = $(this).data('kode_tkk_daftar');
-         var nim = $(this).data('nim');
-         var nama = $(this).data('nama');
-         var fakultas = $(this).data('fakultas');
-         var prodi = $(this).data('prodi');
-         $('#validasitkk #kode_tkk_daftar').val(kode_tkk_daftar);
-         $('#validasitkk #nim').val(nim);
-         $('#validasitkk #nama').val(nama);
-         $('#validasitkk #fakultas').val(fakultas);
-         $('#validasitkk #prodi').val(prodi);
-         $("#modal-validasitkk").show();
+         // Open Modal
+         $(document).on('click', '#tombolvalidasitkk', function() {
+            var kode_tkk_daftar = $(this).data('kode_tkk_daftar');
+            var nim = $(this).data('nim');
+            var nama = $(this).data('nama');
+            var fakultas = $(this).data('fakultas');
+            var prodi = $(this).data('prodi');
+            $('#validasitkk #kode_tkk_daftar').val(kode_tkk_daftar);
+            $('#validasitkk #nim').val(nim);
+            $('#validasitkk #nama').val(nama);
+            $('#validasitkk #fakultas').val(fakultas);
+            $('#validasitkk #prodi').val(prodi);
+            $("#modal-validasitkk").show();
          });
 
          // Close Modal
          $(".close").click(function() {
-         $("#modal-validasitkk").hide();
+            $("#modal-validasitkk").hide();
          });
 
          // Autocomplete
@@ -411,8 +448,8 @@
                   url: "<?php echo base_url('ValidasiTKK/searchAutoComplete'); ?>",
                   dataType: "json",
                   data: {
-                           keyword: $("#validasitkk #cari_dosen").val()
-                        },
+                     keyword: $("#validasitkk #cari_dosen").val()
+                  },
                   success: function(data) {
                      if (data.length > 0) {
                         $('#validasitkk #dropdownDosen').empty();
@@ -421,26 +458,26 @@
                      } else if (data.length == 0) {
                         $('#validasitkk #cari_dosen').attr("data-toggle", "");
                      }
-                     $.each(data, function (key,value) {
-                     if (data.length >= 0){
-                        $('#validasitkk #dropdownDosen').append('<li role="presentation" ><a role="menuitem dropdownnameli" data-id="' + value['kode_dosen'] +'" data-nip="' + value['nip'] +'" data-jabatan="' + value['jabatan'] +'" style="cursor: pointer;" class="dropdownlivalue">'+ value['nama'] + '</a></li>');
-                     }
+                     $.each(data, function(key, value) {
+                        if (data.length >= 0) {
+                           $('#validasitkk #dropdownDosen').append('<li role="presentation" ><a role="menuitem dropdownnameli" data-id="' + value['kode_dosen'] + '" data-nip="' + value['nip'] + '" data-jabatan="' + value['jabatan'] + '" style="cursor: pointer;" class="dropdownlivalue">' + value['nama'] + '</a></li>');
+                        }
 
                      });
-                     }
-                  });
-               },
-               minLength: 2
-            });
-            $('ul#dropdownDosen').on('click', 'li a', function () {
+                  }
+               });
+            },
+            minLength: 2
+         });
+         $('ul#dropdownDosen').on('click', 'li a', function() {
             $('#validasitkk #cari_dosen').val($(this).text());
             $('#validasitkk #kode_dosen').val($(this).attr("data-id"));
 
             // DEBUG, display value on screen 
-            $('#validasitkk #nip').html( $(this).attr("data-nip") );
-            $('#validasitkk #jabatan').html( $(this).attr("data-jabatan") );
+            $('#validasitkk #nip').html($(this).attr("data-nip"));
+            $('#validasitkk #jabatan').html($(this).attr("data-jabatan"));
             $('ul#dropdownDosen').hide();
-            });
+         });
       });
    </script>
 
@@ -454,7 +491,7 @@
          })
       })
    </script>
-   
+
 </body>
 
 </html>

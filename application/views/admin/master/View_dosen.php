@@ -32,21 +32,16 @@
                   </thead>
                   <tbody>
                     <?php $no = 1;
-                    foreach ($row->result() as $rows => $data) { ?>
+                    foreach ($row as $rows => $data) { ?>
                       <tr>
                         <td class="text-center"> <?= $no++; ?>.</td>
-                        <td>
-                          <?= $data->nama; ?>
-                        </td>
+                        <td style="width:20%;"><?= $data->nama; ?></td>
                         <td><?= $data->nip; ?></td>
                         <td><?= $data->jabatan; ?></td>
                         <td><?= $data->notelp; ?></td>
-                        <td >
-                          <form class="text-center" action="<?= site_url('Datadosen/hapus') ?>" id="hapusDosen" method="POST">
-                            <a class="btn btn-warning btn-md" id="tomboledituser" data-toggle="modal" data-target="#modal-edituser" data-kode_dosen="<?= $data->kode_dosen ?>" data-nama="<?= $data->nama ?>" data-nip="<?= $data->nip ?>" data-status_aktif="<?= $data->status_aktif ?>" data-jabatan="<?= $data->jabatan ?>" data-notelp="<?= $data->notelp ?>"><i class="fa fa-edit"> Edit</i></a>
-                            <input type="text" name="kode_dosen" value="<?= $data->kode_dosen ?>">
-                            <button type="submit" class="btn btn-danger btn-md btn-hapusDosen"><i class="fa fa-trash"> Hapus</i></button>
-                          </form>                          
+                        <td>
+                          <a class="btn btn-warning btn-md" id="tomboleditdosen" data-toggle="modal" data-target="#modal-editdosen" data-kode_dosen="<?= $data->kode_dosen ?>" data-nama="<?= $data->nama ?>" data-nidn="<?= $data->nidn ?>" data-nip="<?= $data->nip ?>" data-status_aktif="<?= $data->status_aktif ?>" data-jabatan="<?= $data->jabatan ?>" data-notelp="<?= $data->notelp ?>"><i class="fa fa-edit"> Edit</i></a>
+                          <button type="submit" class="btn btn-danger btn-md btn-delete" data-kode_dosen="<?= $data->kode_dosen ?>" data-nama="<?= $data->nama ?>"><i class="fa fa-trash"> Hapus</i></button>
                         </td>
                       </tr>
                     <?php } ?>
@@ -58,35 +53,44 @@
           <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
             <div class="x_panel">
               <div class="x_title">
-                <h2>Tambah User <mdall>Administrator</small></h2>
+                <h2>Tambah Dosen <mdall>Administrator</small></h2>
                 <div class="clearfix"></div>
               </div>
               <div class="x_content">
-                <form class="form-horizontal form-label-left" action="<?= site_url('Datauser/tambah_user') ?>" method="POST">
+                <form class="form-horizontal form-label-left" action="<?= site_url('Datadosen/tambah_dosen') ?>" method="POST">
                   <div class="item form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Nama *</span>
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nama">Nama <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                      <input id="nama" class="form-control col-md-7 col-xs-12" name="nama" placeholder="nama lengkap" required type="text">
+                      <input id="nama" class="form-control col-md-7 col-xs-12" name="nama" placeholder="nama lengkap" required="required" type="text">
                     </div>
                   </div>
                   <div class="item form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Email *</span>
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nama">NIDN
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                      <input type="email" id="email" name="email" required class="form-control col-md-7 col-xs-12">
+                      <input id="nidn" class="form-control col-md-7 col-xs-12" name="nidn" placeholder="nidn (kosongkan jika belum ada)" type="text">
                     </div>
                   </div>
                   <div class="item form-group">
-                    <label for="password" class="control-label col-md-3">Password</label>
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nama">NIP <span class="required">*</span>
+                    </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                      <input id="password1" type="password" name="password1" class="form-control col-md-7 col-xs-12" required="required">
+                      <input id="nip" class="form-control col-md-7 col-xs-12" name="nip" placeholder='NIP (ketik "- / NIDN" jika tidak ada)' required="required" type="text">
                     </div>
                   </div>
                   <div class="item form-group">
-                    <label for="password2" class="control-label col-md-3 col-sm-3 col-xs-12">Konfirmasi Password</label>
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nama">Jabatan <span class="required">*</span>
+                    </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                      <input id="password3" type="password" name="password3" class="form-control col-md-7 col-xs-12" required="required">
+                      <input id="jabatan" class="form-control col-md-7 col-xs-12" name="jabatan" placeholder="Jabatan" required="required" type="text">
+                    </div>
+                  </div>
+                  <div class="item form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nama">No Telepon
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input id="notelp" class="form-control col-md-7 col-xs-12" name="notelp" placeholder="No Telepon" type="text">
                     </div>
                   </div>
                   <div class="ln_solid"></div>
@@ -108,46 +112,55 @@
 </div>
 
 
-<div class="modal fade" id="modal-edituser" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="modal-editdosen" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
         </button>
       </div>
-      <div class="modal-body" id="edituser">
+      <div class="modal-body" id="editdosen">
         <div class="x_title">
-          <h2>Tambah User <small>Administrator</small></h2>
+          <h2>Edit User <small>Administrator</small></h2>
           <div class="clearfix"></div>
         </div>
         <div class="x_content form-horizontal form-label-left">
-          <form action="<?= site_url('Datauser/edit_user') ?>" method="POST">
+          <form action="<?= site_url('Datadosen/edit_dosen') ?>" method="POST">
             <div class="item form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Nama <span class="required">*</span>
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nama">Nama <span class="required">*</span>
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
                 <input id="nama" class="form-control col-md-7 col-xs-12" name="nama" placeholder="nama lengkap" required="required" type="text">
+                <input id="kode_dosen" class="form-control col-md-7 col-xs-12" name="kode_dosen" required="required" type="hidden">
+                <input id="status_aktif" class="form-control col-md-7 col-xs-12" name="status_aktif" required="required" type="hidden">
               </div>
             </div>
             <div class="item form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email" placeholder="email">Email <span class="required">*</span>
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nama">NIDN
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <input type="email" id="email" name="email" class="form-control col-md-7 col-xs-12">
-                <input type="hidden" id="kode_user" name="kode_user" required>
-                <input type="hidden" id="status_aktif" name="status_aktif" required>
+                <input id="nidn" class="form-control col-md-7 col-xs-12" name="nidn" placeholder="nidn (jika ada)" type="text">
               </div>
             </div>
             <div class="item form-group">
-              <label for="password" class="control-label col-md-3">Password</label>
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nama">NIP <span class="required">*</span>
+              </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <input id="password" type="password" name="password" class="form-control col-md-7 col-xs-12" required="required">
+                <input id="nip" class="form-control col-md-7 col-xs-12" name="nip" placeholder='NIP (ketik "- / NIDN" jika tidak ada)' required="required" type="text">
               </div>
             </div>
             <div class="item form-group">
-              <label for="password2" class="control-label col-md-3 col-sm-3 col-xs-12">Konfirmasi Password</label>
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nama">Jabatan <span class="required">*</span>
+              </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <input id="password2" type="password" name="password2" class="form-control col-md-7 col-xs-12" required="required">
+                <input id="jabatan" class="form-control col-md-7 col-xs-12" name="jabatan" placeholder="Jabatan" required="required" type="text">
+              </div>
+            </div>
+            <div class="item form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nama">No Telepon
+              </label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <input id="notelp" class="form-control col-md-7 col-xs-12" name="notelp" placeholder="No Telepon" type="text">
               </div>
             </div>
             <div class="ln_solid"></div>

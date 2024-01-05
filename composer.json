@@ -33,12 +33,12 @@
 		"mikey179/vfsstream": "1.6.*",
 		"phpunit/phpunit": "4.* || 5.* || 9.*"
 	},
-	"require": {
-		"phpoffice/phpspreadsheet": "^1.28"
+	"require2": {
+		"phpoffice/phpspreadsheet": "^1.29"
 	},
 	"config": {
 		"platform": {
-				"php": "8.0.3"
+				"php": "7.4.33"
 		}
 }
 }

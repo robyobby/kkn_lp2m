@@ -4,14 +4,14 @@
       <div class="row">
          <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
-            <?= $this->session->flashdata('pesan'); ?>
+               <?= $this->session->flashdata('pesan'); ?>
                <div class="x_title">
-                  <h2>Data Mahasiswa TKK </h2> 
+                  <h2>Data Mahasiswa TKK </h2>
                   <ul class="nav navbar-right panel_toolbox">
                      <?php
                      if (empty($cekKelulusan)) { ?>
                         <li>
-                           <button class="btn btn-success btn-sm" type="button" id="tombolsertifikat" data-toggle="modal" data-target="#modal-sertifikat" data-lulus="<?= $jumlahMahasiswaLulus ?> Mahasiswa" data-tidaklulus="<?= $jumlahMahasiswaTidakLulus ?> Mahasiswa" aria-expanded="true"><i class="fa fa-file-pdf-o"></i> Sertifikat</button>
+                           <button class="btn btn-success btn-sm" type="button" id="tombolsertifikat" data-toggle="modal" data-target="#modal-sertifikat" data-lulus="<?= $jumlahMahasiswaLulus ?> . Mahasiswa" data-tidaklulus="<?= $jumlahMahasiswaTidakLulus ?> . Mahasiswa" aria-expanded="true"><i class="fa fa-file-pdf-o"></i> Sertifikat</button>
                         </li>
                      <?php } ?>
                      <li>
@@ -20,28 +20,28 @@
                         <button class="btn btn-success btn-sm" type="button" id="downloadTemplate" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-download"></i> Template <span class="caret"></span></button>
                         <ul role="menu" class="dropdown-menu">
                            <form action="<?= site_url('ValidasiTKK/excelMahasiswa') ?>" method="POST">
-                              <li><button type="submit" class="btn btn-link")><i class="fa fa-user"></i> Mahasiswa</button></li>
+                              <li><button type="submit" class="btn btn-link" )><i class="fa fa-user"></i> Mahasiswa</button></li>
                            </form>
                            <form action="<?= site_url('ValidasiTKK/excelDosen') ?>" method="POST">
-                              <li><button type="submit" class="btn btn-link")><i class="fa fa-users"></i> Dosen</a></li>
+                              <li><button type="submit" class="btn btn-link" )><i class="fa fa-users"></i> Dosen</a></li>
                            </form>
                         </ul>
                      </li>
                      <li>
                         <form action="<?= site_url('ValidasiTKK/importValidasi') ?>" method="POST" enctype="multipart/form-data">
-                           <li>
-                              <button type="submit" class="btn btn-success btn-sm")><i class="fa fa-file-powerpoint-o"></i> Import Data Penguji</button>
-                              <input type="file" class="btn btn-success btn-sm" name="excel_file" accept=".xls, .xlsx">
-                           </li>
-                        </form>
+                     <li>
+                        <button type="submit" class="btn btn-success btn-sm" )><i class="fa fa-file-powerpoint-o"></i> Import Data Penguji</button>
+                        <input type="file" class="btn btn-success btn-sm" name="excel_file" accept=".xls, .xlsx">
+                     </li>
+                     </form>
                      </li>
                      <li>
                         <form action="<?= site_url('ValidasiTKK/importNilai') ?>" method="POST" enctype="multipart/form-data">
-                           <li>
-                              <button type="submit" class="btn btn-success btn-sm")><i class="fa fa-file-excel-o"></i> Import Nilai</button>
-                              <input type="file" class="btn btn-success btn-sm" name="excel_file2" accept=".xls, .xlsx">
-                           </li>
-                        </form>
+                     <li>
+                        <button type="submit" class="btn btn-success btn-sm" )><i class="fa fa-file-excel-o"></i> Import Nilai</button>
+                        <input type="file" class="btn btn-success btn-sm" name="excel_file2" accept=".xls, .xlsx">
+                     </li>
+                     </form>
                      </li>
                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                      </li>
@@ -94,13 +94,13 @@
                               <tr>
                                  <td class="text-center"> <?= $no++; ?>.</td>
                                  <td>
-                                    <?= $item -> nim; ?> <br>
-                                       <?php
-                                       if ($item->kode_dosen == null) { ?>
-                                          <div class="label label-warning">Belum ada penguji</div>
-                                       <?php } else { ?>
-                                          <div class="label label-info">Sudah ada penguji</div>
-                                       <?php } ?>
+                                    <?= $item->nim; ?> <br>
+                                    <?php
+                                    if ($item->kode_dosen == null) { ?>
+                                       <div class="label label-warning">Belum ada penguji</div>
+                                    <?php } else { ?>
+                                       <div class="label label-info">Sudah ada penguji</div>
+                                    <?php } ?>
                                  </td>
                                  <td style="display: none;"><?= $item->nim; ?></td>
                                  <td>
@@ -115,7 +115,7 @@
                                           <div class="label label-warning">Belum ada sertifikat</div>
                                        <?php } else { ?>
                                           <div class="label label-info">Sudah ada sertifikat</div>
-                                       <?php } ?>   
+                                       <?php } ?>
                                     <?php } elseif ($item->status_lulus == "tl") { ?>
                                        <div class="label label-danger">Tidak Lulus</div>
                                     <?php } ?>
@@ -179,10 +179,10 @@
                   <div class="item form-group">
                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="cari_dosen">Nama Dosen <span class="required">*</span></label>
                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input type="text" id="cari_dosen" name="cari_dosen" class="form-control col-md-7 col-xs-12" placeholder="Cari Dosen....." required>          
+                        <input type="text" id="cari_dosen" name="cari_dosen" class="form-control col-md-7 col-xs-12" placeholder="Cari Dosen....." required>
                         <input type="hidden" id="kode_dosen" name="kode_dosen" class="form-control col-md-7 col-xs-12" readonly required>
                         <br><br>
-                        <div class="dropdown">   
+                        <div class="dropdown">
                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" id="dropdownDosen"></ul>
                         </div>
                      </div>

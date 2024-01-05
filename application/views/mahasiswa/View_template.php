@@ -110,8 +110,8 @@
    </div>
 
    <!-- jQuery -->
-   <!-- <script src="<?= base_url() ?>assets/vendors/jquery/dist/jquery.min.js"></script> -->
-   <script src="<?= base_url() ?>assets/vendors/jquery/dist/jquery3.7.1.min.js"></script>
+   <script src="<?= base_url() ?>assets/vendors/jquery/dist/jquery.min.js"></script>
+   <script src="<?= base_url() ?>assets/vendors/jquery-3.7.1/jquery-ui.js"></script>
    <!-- Bootstrap -->
    <script src="<?= base_url() ?>assets/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
    <!-- FastClick -->

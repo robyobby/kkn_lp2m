@@ -40,18 +40,47 @@ class ValidasiTKK extends CI_Controller
       $filter = $this->input->post('filter');
       $status = $this->input->post('status');
       $status_aktif = 1;
+      $status_kelulusan = 'l';
       $data['TahapAktif'] = $this->M_tkkperiode->ambil_baris_tkk_tahap($status_aktif)->row_array();
       $kode_tkk_tahap = $data['TahapAktif']['kode_tkk_tahap'];
+      $cekKelulusan = $this->M_tkkperiode->cekKelulusan($kode_tkk_tahap)->row_array();
+      $jumlahMahasiswaLulus = $this->M_tkkperiode->dataMahasiswaLulus($kode_tkk_tahap);
+      $jumlahMahasiswaTidakLulus = $this->M_tkkperiode->dataMahasiswaTidakLulus($kode_tkk_tahap);
+
+      $dataTKKlulus = $this->M_tkkperiode->dataTKK_lulus($kode_tkk_tahap, $status_kelulusan)->result_array();
+
       if ($filter == 1) {
-         $data['dataTKKaktif'] = $this->M_tkkperiode->dataTKK_filter($kode_tkk_tahap,$status)->result();
-         $this->template->load('admin/templates/View_template', 'admin/master/View_validasitkk', $data);
+         if ($status == "tg") {
+            $dataTKKaktif = $this->M_tkkperiode->dataTKK_filter($kode_tkk_tahap, $status)->result();
+         } elseif ($status == "tl") {
+            $dataTKKaktif = $this->M_tkkperiode->dataTKK_filter($kode_tkk_tahap, $status)->result();
+         } elseif ($status == "l") {
+            $dataTKKaktif = $this->M_tkkperiode->dataTKK_filter($kode_tkk_tahap, $status)->result();
+         } else {
+            $dataTKKaktif = $this->M_tkkperiode->dataTKK_aktif($kode_tkk_tahap)->result();
+         }
       } elseif ($filter == 2) {
-         $data['dataTKKaktif'] = $this->M_tkkperiode->dataTKK_filterNULL($kode_tkk_tahap,$status)->result();
-         $this->template->load('admin/templates/View_template', 'admin/master/View_validasitkk', $data);
+         $dataTKKaktif = $this->M_tkkperiode->dataTKK_filterNULL($kode_tkk_tahap, $status)->result();
       } else {
-         $data['dataTKKaktif'] = $this->M_tkkperiode->dataTKK_aktif($kode_tkk_tahap)->result();
-         $this->template->load('admin/templates/View_template', 'admin/master/View_validasitkk', $data);
+         if ($status == "tg") {
+            $dataTKKaktif = $this->M_tkkperiode->dataTKK_filter($kode_tkk_tahap, $status)->result();
+         } elseif ($status == "tl") {
+            $dataTKKaktif = $this->M_tkkperiode->dataTKK_filter($kode_tkk_tahap, $status)->result();
+         } elseif ($status == "l") {
+            $dataTKKaktif = $this->M_tkkperiode->dataTKK_filter($kode_tkk_tahap, $status)->result();
+         } else {
+            $dataTKKaktif = $this->M_tkkperiode->dataTKK_aktif($kode_tkk_tahap)->result();
+         }
       }
+      $data = [
+         'dataTKKaktif' => $dataTKKaktif,
+         'cekKelulusan' => $cekKelulusan,
+         'jumlahMahasiswaLulus' => $jumlahMahasiswaLulus,
+         'jumlahMahasiswaTidakLulus' => $jumlahMahasiswaTidakLulus,
+         'dataTKKlulus' => $dataTKKlulus
+      ];
+
+      $this->template->load('admin/templates/View_template', 'admin/master/View_validasitkk', $data);
    }
 
    public function excelMahasiswa()
@@ -102,11 +131,11 @@ class ValidasiTKK extends CI_Controller
          // Add other columns as needed
          $row++;
       }
-      
+
       $fileName = 'Data-Mahasiswa-TKK-Tahap-Ke-' . $TahapAktif['tahap_ke'] . '-Semester-' . $TahapAktif['semester'] . '-TA-' . $TahapAktif['tahun_akademik'];
       // Set headers for download
       header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-      header('Content-Disposition: attachment;filename="'.$fileName.'.xlsx"');
+      header('Content-Disposition: attachment;filename="' . $fileName . '.xlsx"');
       header('Cache-Control: max-age=0');
 
       // Create Excel file
@@ -162,7 +191,8 @@ class ValidasiTKK extends CI_Controller
       $writer->save('php://output');
    }
 
-   public function importValidasi() {
+   public function importValidasi()
+   {
       // Load library PhpSpreadsheet
       require_once APPPATH . 'third_party/PhpSpreadsheet/vendor/autoload.php';
 
@@ -170,7 +200,7 @@ class ValidasiTKK extends CI_Controller
       if ($_FILES['excel_file']['error'] == 0) {
          // Tentukan path untuk menyimpan berkas Excel yang diunggah
          $file_name = time() . $_FILES['excel_file']['name'];
-         $upload_path = FCPATH . 'application/uploads/';         
+         $upload_path = FCPATH . 'application/uploads/';
          $file_path = $upload_path . $file_name;
 
          // Pindahkan berkas yang diunggah ke lokasi yang ditentukan
@@ -181,10 +211,10 @@ class ValidasiTKK extends CI_Controller
          } else {
             $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">
 				File tidak ditemukan !! </div>');
-            redirect ('ValidasiTKK');
+            redirect('ValidasiTKK');
             die();
          }
-         
+
          // Mendapatkan objek spreadsheet dari file Excel
          $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($file_path);
 
@@ -206,15 +236,16 @@ class ValidasiTKK extends CI_Controller
          }
          $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">
 				Data berhasil di-update </div>');
-            redirect ('ValidasiTKK');
+         redirect('ValidasiTKK');
       } else {
          $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">
 				Data gagal di-update </div>');
-            redirect ('ValidasiTKK');
+         redirect('ValidasiTKK');
       }
    }
 
-   public function importNilai() {
+   public function importNilai()
+   {
       // Load library PhpSpreadsheet
       require_once APPPATH . 'third_party/PhpSpreadsheet/vendor/autoload.php';
 
@@ -222,7 +253,7 @@ class ValidasiTKK extends CI_Controller
       if ($_FILES['excel_file2']['error'] == 0) {
          // Tentukan path untuk menyimpan berkas Excel yang diunggah
          $file_name = time() . $_FILES['excel_file2']['name'];
-         $upload_path = FCPATH . 'application/uploads/';         
+         $upload_path = FCPATH . 'application/uploads/';
          $file_path = $upload_path . $file_name;
 
          // Pindahkan berkas yang diunggah ke lokasi yang ditentukan
@@ -233,10 +264,10 @@ class ValidasiTKK extends CI_Controller
          } else {
             $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">
 				File tidak ditemukan !! </div>');
-            redirect ('ValidasiTKK');
+            redirect('ValidasiTKK');
             die();
          }
-         
+
          // Mendapatkan objek spreadsheet dari file Excel
          $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($file_path);
 
@@ -259,11 +290,11 @@ class ValidasiTKK extends CI_Controller
          }
          $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">
 				Data berhasil di-update </div>');
-            redirect ('ValidasiTKK');
+         redirect('ValidasiTKK');
       } else {
          $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">
 				Data gagal di-update </div>');
-            redirect ('ValidasiTKK');
+         redirect('ValidasiTKK');
       }
    }
 
@@ -303,11 +334,12 @@ class ValidasiTKK extends CI_Controller
             [
                'no_sertifikat' => $this->fungsi->generateRandomString(40),
                'tanggal_expired' => $tanggal_expired
-            ]);
+            ]
+         );
       }
-         if ($this->db->affected_rows() > 0) {
-            $this->session->set_flashdata('success', 'Data Berhasil Diubah !');
-         }
+      if ($this->db->affected_rows() > 0) {
+         $this->session->set_flashdata('success', 'Data Berhasil Diubah !');
+      }
       redirect('ValidasiTKK');
    }
 }

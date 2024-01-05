@@ -144,7 +144,7 @@ class M_tkkperiode extends CI_Model
       }
    }
 
-   public function dataTKK_filterNULL($kode_tkk_tahap,$status)
+   public function dataTKK_filterNULL($kode_tkk_tahap, $status)
    {
       $this->db->select('*');
       $this->db->from('view_tkk_daftar');
@@ -171,18 +171,18 @@ class M_tkkperiode extends CI_Model
    public function dataMahasiswaLulus($kode_tkk_tahap)
    {
       $this->db->where('kode_tkk_tahap', $kode_tkk_tahap);
-      $this->db->where('status_lulus','l');
+      $this->db->where('status_lulus', 'l');
       return $this->db->count_all_results('view_tkk_daftar');
    }
 
    public function dataMahasiswaTidakLulus($kode_tkk_tahap)
    {
       $this->db->where('kode_tkk_tahap', $kode_tkk_tahap);
-      $this->db->where('status_lulus','tl');
+      $this->db->where('status_lulus', 'tl');
       return $this->db->count_all_results('view_tkk_daftar');
    }
 
-   public function BlankoNilaiDosen($kode_tkk_tahap,$kode_dosen)
+   public function BlankoNilaiDosen($kode_tkk_tahap, $kode_dosen)
    {
       $query = $this->db->query("SELECT * FROM view_tkk_daftar_dosen WHERE kode_tkk_tahap = $kode_tkk_tahap AND kode_dosen = $kode_dosen");
       return $query;

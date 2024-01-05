@@ -36,20 +36,24 @@ class M_dosen extends CI_Model
   public function edit($post)
   {
     $params['nama'] = $post['nama'];
-    $params['email'] = $post['email'];
-    $params['password'] = password_hash($post['password'], PASSWORD_BCRYPT);
+    $params['nidn'] = $post['nidn'];
+    $params['nip'] = $post['nip'];
+    $params['jabatan'] = $post['jabatan'];
+    $params['notelp'] = $post['notelp'];
     $params['status_aktif'] = $post['status_aktif'];
-    $this->db->where('kode_user', $post['kode_user']);
-    $this->db->update('master_user', $params);
+    $this->db->where('kode_dosen', $post['kode_dosen']);
+    $this->db->update('master_dosen', $params);
   }
 
-  public function tambah_user($post)
+  public function tambah_dosen($post)
   {
     $params['nama'] = $post['nama'];
-    $params['email'] = $post['email'];
-    $params['password'] = password_hash($post['password'], PASSWORD_BCRYPT);
+    $params['nidn'] = $post['nidn'];
+    $params['nip'] = $post['nip'];
+    $params['jabatan'] = $post['jabatan'];
+    $params['notelp'] = $post['notelp'];
     $params['status_aktif'] = $post['status_aktif'];
-    $this->db->insert('master_user', $params);
+    $this->db->insert('master_dosen', $params);
   }
 
   public function APIMahasiswa($userdata)
