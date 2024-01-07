@@ -28,7 +28,7 @@
                         </ul>
                      </li>
                      <li>
-                        <form action="<?= site_url('ValidasiTKK/importValidasi') ?>" method="POST" enctype="multipart/form-data">
+                        <form action="<?= site_url('ValidasiTKK/importPenguji') ?>" method="POST" enctype="multipart/form-data">
                      <li>
                         <button type="submit" class="btn btn-success btn-sm" )><i class="fa fa-file-powerpoint-o"></i> Import Data Penguji</button>
                         <input type="file" class="btn btn-success btn-sm" name="excel_file" accept=".xls, .xlsx">
@@ -115,6 +115,7 @@
                                           <div class="label label-warning">Belum ada sertifikat</div>
                                        <?php } else { ?>
                                           <div class="label label-info">Sudah ada sertifikat</div>
+                                          <div class="label label-info"><?= $item->tanggal_expired; ?></div>
                                        <?php } ?>
                                     <?php } elseif ($item->status_lulus == "tl") { ?>
                                        <div class="label label-danger">Tidak Lulus</div>
@@ -219,6 +220,10 @@
          <div class="modal-body" id="sertifikat">
             <div class="x_title">
                <h2>Buat Sertifikat <small>Administrator</small></h2>
+               <div class="clearfix"></div>
+            </div>
+            <div class="x_title">
+               <p style="color : #f28b9e">Mengisi Tanggal Expired Sertifikat akan membuat data yang sudah dibuat akan terupdate sesuai dengan Tanggal yang terbaru</p>
                <div class="clearfix"></div>
             </div>
             <div class="x_content form-horizontal form-label-left">

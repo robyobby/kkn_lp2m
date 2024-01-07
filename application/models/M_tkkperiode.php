@@ -99,6 +99,7 @@ class M_tkkperiode extends CI_Model
       $this->db->from('view_tkk_daftar');
       $this->db->where('kode_tkk_tahap', $kode_tkk_tahap);
       $this->db->where('status_lulus', $status_kelulusan);
+      $this->db->where('no_sertifikat IS NULL');
       $this->db->order_by('nama', 'ASC');
       $query = $this->db->get();
       $result = $query->result();

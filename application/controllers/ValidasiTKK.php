@@ -10,6 +10,7 @@ class ValidasiTKK extends CI_Controller
    {
       parent::__construct();
       $this->load->model(['M_mahasiswa', 'M_tkkperiode']);
+      $this->load->library('image_lib');
    }
 
    public function index()
@@ -19,6 +20,7 @@ class ValidasiTKK extends CI_Controller
       $data['TahapAktif'] = $this->M_tkkperiode->ambil_baris_tkk_tahap($status_aktif)->row_array();
       $kode_tkk_tahap = $data['TahapAktif']['kode_tkk_tahap'];
       $dataTKKaktif = $this->M_tkkperiode->dataTKK_aktif($kode_tkk_tahap)->result();
+      $cekTKKaktif = $this->M_tkkperiode->dataTKK_aktif($kode_tkk_tahap)->row_array();
       $cekKelulusan = $this->M_tkkperiode->cekKelulusan($kode_tkk_tahap)->row_array();
       $jumlahMahasiswaLulus = $this->M_tkkperiode->dataMahasiswaLulus($kode_tkk_tahap);
       $jumlahMahasiswaTidakLulus = $this->M_tkkperiode->dataMahasiswaTidakLulus($kode_tkk_tahap);
@@ -30,8 +32,10 @@ class ValidasiTKK extends CI_Controller
          'cekKelulusan' => $cekKelulusan,
          'jumlahMahasiswaLulus' => $jumlahMahasiswaLulus,
          'jumlahMahasiswaTidakLulus' => $jumlahMahasiswaTidakLulus,
-         'dataTKKlulus' => $dataTKKlulus
+         'dataTKKlulus' => $dataTKKlulus,
+         'cekTKKaktif' => $cekTKKaktif,
       ];
+      // print_r($data['cekTKKaktif']['tahap_ke']);
       $this->template->load('admin/templates/View_template', 'admin/master/View_validasitkk', $data);
    }
 
@@ -191,32 +195,49 @@ class ValidasiTKK extends CI_Controller
       $writer->save('php://output');
    }
 
-   public function importValidasi()
+   public function importPenguji()
    {
       // Load library PhpSpreadsheet
       require_once APPPATH . 'third_party/PhpSpreadsheet/vendor/autoload.php';
 
       // Cek apakah berkas Excel telah diunggah
       if ($_FILES['excel_file']['error'] == 0) {
+         $status_aktif = 1;
+         $data['TahapAktif'] = $this->M_tkkperiode->ambil_baris_tkk_tahap($status_aktif)->row_array();
+         $kode_tkk_tahap = $data['TahapAktif']['kode_tkk_tahap'];
+         $data['dataTKKaktif'] = $this->M_tkkperiode->dataTKK_aktif($kode_tkk_tahap)->row_array();
+         $cekSemesterAkademik = $data['dataTKKaktif']['semester_akademik'];
+         $cekTahapTKK = $data['dataTKKaktif']['tahap_ke'];
+
          // Tentukan path untuk menyimpan berkas Excel yang diunggah
-         $file_name = time() . $_FILES['excel_file']['name'];
-         $upload_path = FCPATH . 'application/uploads/';
-         $file_path = $upload_path . $file_name;
+         if (!empty($cekSemesterAkademik)) {
+            $dirSemesterAkademik = FCPATH . 'application/uploads/importPenguji/' . $cekSemesterAkademik . '/';
+            $this->BuatFolderSemesterAkademik($dirSemesterAkademik);
+         }
+         
+         if (!empty($cekTahapTKK)) {
+            // $dirSemesterAkademik = FCPATH . 'application/uploads/importPenguji/' . $cekSemesterAkademik . '/';
+            $dirTahapTKK = FCPATH . 'application/uploads/importPenguji/' . $cekSemesterAkademik . '/' . $cekTahapTKK . '/';
+            $this->BuatFolderTahapTKK($dirTahapTKK);
+         }
+
+
+         $config['file_name'] = time() . $_FILES['excel_file']['name'];
+         $config['upload_path'] = $dirTahapTKK;
+         $config['file_path'] = $config['upload_path'] . $config['file_name'];
 
          // Pindahkan berkas yang diunggah ke lokasi yang ditentukan
-         print_r($_FILES['excel_file']['tmp_name']);
          if (file_exists($_FILES['excel_file']['tmp_name'])) {
             // Move the uploaded file
-            move_uploaded_file($_FILES['excel_file']['tmp_name'], $file_path);
+            move_uploaded_file($_FILES['excel_file']['tmp_name'], $config['file_path']);
          } else {
             $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">
 				File tidak ditemukan !! </div>');
             redirect('ValidasiTKK');
             die();
          }
-
          // Mendapatkan objek spreadsheet dari file Excel
-         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($file_path);
+         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($config['file_path']);
 
          // Mendapatkan data dari spreadsheet
          $data = $spreadsheet->getActiveSheet()->toArray();
@@ -251,9 +272,27 @@ class ValidasiTKK extends CI_Controller
 
       // Cek apakah berkas Excel telah diunggah
       if ($_FILES['excel_file2']['error'] == 0) {
+         $status_aktif = 1;
+         $data['TahapAktif'] = $this->M_tkkperiode->ambil_baris_tkk_tahap($status_aktif)->row_array();
+         $kode_tkk_tahap = $data['TahapAktif']['kode_tkk_tahap'];
+         $data['dataTKKaktif'] = $this->M_tkkperiode->dataTKK_aktif($kode_tkk_tahap)->row_array();
+         $cekSemesterAkademik = $data['dataTKKaktif']['semester_akademik'];
+         $cekTahapTKK = $data['dataTKKaktif']['tahap_ke'];
+
+         // Tentukan path untuk menyimpan berkas Excel yang diunggah
+         if (!empty($cekSemesterAkademik)) {
+            $dirSemesterAkademik = FCPATH . 'application/uploads/importNilai/' . $cekSemesterAkademik . '/';
+            $this->BuatFolderSemesterAkademik($dirSemesterAkademik);
+         }
+         
+         if (!empty($cekTahapTKK)) {
+            $dirTahapTKK = FCPATH . 'application/uploads/importNilai/' . $cekSemesterAkademik . '/' . $cekTahapTKK . '/';
+            $this->BuatFolderTahapTKK($dirTahapTKK);
+         }
+
          // Tentukan path untuk menyimpan berkas Excel yang diunggah
          $file_name = time() . $_FILES['excel_file2']['name'];
-         $upload_path = FCPATH . 'application/uploads/';
+         $upload_path = $dirTahapTKK;
          $file_path = $upload_path . $file_name;
 
          // Pindahkan berkas yang diunggah ke lokasi yang ditentukan
@@ -317,6 +356,22 @@ class ValidasiTKK extends CI_Controller
       redirect('ValidasiTKK');
    }
 
+   public function BuatFolderSemesterAkademik($path)
+   {
+      // Fungsi untuk membuat folder jika tidak ada
+      if (!is_dir($path)) {
+         mkdir($path, 0775, true);
+      }
+   }
+
+   private function BuatFolderTahapTKK($path2)
+   {
+      // Fungsi untuk membuat folder jika tidak ada
+      if (!is_dir($path2)) {
+         mkdir($path2, 0775, true);
+      }
+   }
+
    public function BuatSertifikat()
    {
       $status_aktif = 1;
@@ -324,10 +379,16 @@ class ValidasiTKK extends CI_Controller
       $data['TahapAktif'] = $this->M_tkkperiode->ambil_baris_tkk_tahap($status_aktif)->row_array();
       $kode_tkk_tahap = $data['TahapAktif']['kode_tkk_tahap'];
       $dataTKKlulus = $this->M_tkkperiode->dataTKK_lulus($kode_tkk_tahap, $status_kelulusan)->result_array();
+      $data['dataTKKaktif'] = $this->M_tkkperiode->dataTKK_aktif($kode_tkk_tahap)->row_array();
       $data = [
-         'dataTKKlulus' => $dataTKKlulus
+         'dataTKKlulus' => $dataTKKlulus,
+         'dataTKKaktif' => $dataTKKaktif
       ];
+      $cekSemesterAkademik = $data['dataTKKaktif']['semester_akademik'];
+      $cekTahapTKK = $data['dataTKKaktif']['tahap_ke'];
+
       $tanggal_expired = $this->input->post('tanggal_expired');
+      
       foreach ($dataTKKlulus as $key => $item) {
          $this->M_tkkperiode->editSertifikat(
             $item['kode_tkk_daftar'],
@@ -337,6 +398,46 @@ class ValidasiTKK extends CI_Controller
             ]
          );
       }
+
+      // Load template sertifikat
+      $templatePath = FCPATH . 'assets/images/Template.png';  // Sesuaikan path template PNG Anda
+      $template = imagecreatefrompng($templatePath);
+
+      // Proses foreach untuk setiap data
+      foreach ($dataTKKlulus as $item2) {
+          // Tambahkan teks atau gambar sesuai dengan data
+         $text = $item2['nama'];
+         $fontPath = FCPATH . 'assets/ttf/Poppin-Regular.ttf';  // Sesuaikan path font TrueType Anda
+
+          // Tambahkan teks ke sertifikat
+         imagettftext($template, 30, 0, 100, 200, imagecolorallocate($template, 0, 0, 0), $fontPath, $text);
+
+          // Simpan sertifikat
+         if (!empty($cekSemesterAkademik)) {
+            $dirSemesterAkademik = FCPATH . 'application/uploads/sertifikat/' . $cekSemesterAkademik . '/';
+            $this->BuatFolderSemesterAkademik($dirSemesterAkademik);
+         }
+         
+         if (!empty($cekTahapTKK)) {
+            $dirTahapTKK = FCPATH . 'application/uploads/sertifikat/' . $cekSemesterAkademik . '/' . $cekTahapTKK . '/';
+            $this->BuatFolderTahapTKK($dirTahapTKK);
+         }
+         $file_name = time() . $item2['nim'] . '.png';
+         $outputPath = $dirTahapTKK . $file_name;  // Sesuaikan path output PNG Anda
+         imagepng($template, $outputPath);
+
+          // Hapus teks yang ditambahkan agar siap untuk data berikutnya
+          // Anda dapat mengosongkan sertifikat atau membuat salinan template baru
+          // Sesuai dengan kebutuhan aplikasi Anda
+         imagealphablending($template, false);
+         imagesavealpha($template, true);
+         imagefilledrectangle($template, 0, 0, imagesx($template), imagesy($template), imagecolorallocatealpha($template, 0, 0, 0, 127));
+      }
+
+      // Hapus sertifikat dari memori
+      imagedestroy($template);
+
+
       if ($this->db->affected_rows() > 0) {
          $this->session->set_flashdata('success', 'Data Berhasil Diubah !');
       }
