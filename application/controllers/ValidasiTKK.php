@@ -399,12 +399,12 @@ class ValidasiTKK extends CI_Controller
          );
       }
 
-      // Load template sertifikat
-      $templatePath = FCPATH . 'assets/images/Template.png';  // Sesuaikan path template PNG Anda
-      $template = imagecreatefrompng($templatePath);
-
+      
       // Proses foreach untuk setiap data
       foreach ($dataTKKlulus as $item2) {
+         // Load template sertifikat
+         $templatePath = FCPATH . 'assets/images/Template.png';  // Sesuaikan path template PNG Anda
+         $template = imagecreatefrompng($templatePath);
           // Tambahkan teks atau gambar sesuai dengan data
          $text = $item2['nama'];
          $fontPath = FCPATH . 'assets/ttf/Poppin-Regular.ttf';  // Sesuaikan path font TrueType Anda
