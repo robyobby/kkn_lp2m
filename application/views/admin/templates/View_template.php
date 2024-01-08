@@ -199,6 +199,8 @@
             text: 'Anda yakin ingin menghapus ' + nama + '?',
             icon: 'warning',
             showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
             confirmButtonText: 'Ya, Hapus!',
             cancelButtonText: 'Batal'
          }).then((result) => {
@@ -242,7 +244,22 @@
             title: 'Gagal !',
             text: isi,
          })
+      <?php } elseif ($this->session->flashdata('success2')) { ?>
+         var isi = <?php echo json_encode($this->session->flashdata('success2')) ?>;
+
+         Swal.fire({
+            icon: 'success',
+            title: 'Berhasil ! !',
+            text: isi,
+         }).then((result) => {
+            // Setelah pengguna mengklik "OK", jalankan proses lain
+            if (result.isConfirmed) {
+               // Ganti 'YOUR_NEW_URL' dengan URL yang sesuai untuk proses lain yang ingin Anda jalankan
+               window.location.href = '<?= base_url('ValidasiTKK/GenerateSertifikat'); ?>';
+            }
+         });
       <?php } ?>
+
       $('.btn-hapus').on('click', function(e) {
          e.preventDefault();
          const href = $(this).attr('href');

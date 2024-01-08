@@ -11,6 +11,7 @@ class ValidasiTKK extends CI_Controller
       parent::__construct();
       $this->load->model(['M_mahasiswa', 'M_tkkperiode']);
       $this->load->library('image_lib');
+      $this->load->library('Ciqrcode');
    }
 
    public function index()
@@ -214,7 +215,7 @@ class ValidasiTKK extends CI_Controller
             $dirSemesterAkademik = FCPATH . 'application/uploads/importPenguji/' . $cekSemesterAkademik . '/';
             $this->BuatFolderSemesterAkademik($dirSemesterAkademik);
          }
-         
+
          if (!empty($cekTahapTKK)) {
             // $dirSemesterAkademik = FCPATH . 'application/uploads/importPenguji/' . $cekSemesterAkademik . '/';
             $dirTahapTKK = FCPATH . 'application/uploads/importPenguji/' . $cekSemesterAkademik . '/' . $cekTahapTKK . '/';
@@ -284,7 +285,7 @@ class ValidasiTKK extends CI_Controller
             $dirSemesterAkademik = FCPATH . 'application/uploads/importNilai/' . $cekSemesterAkademik . '/';
             $this->BuatFolderSemesterAkademik($dirSemesterAkademik);
          }
-         
+
          if (!empty($cekTahapTKK)) {
             $dirTahapTKK = FCPATH . 'application/uploads/importNilai/' . $cekSemesterAkademik . '/' . $cekTahapTKK . '/';
             $this->BuatFolderTahapTKK($dirTahapTKK);
@@ -379,17 +380,13 @@ class ValidasiTKK extends CI_Controller
       $data['TahapAktif'] = $this->M_tkkperiode->ambil_baris_tkk_tahap($status_aktif)->row_array();
       $kode_tkk_tahap = $data['TahapAktif']['kode_tkk_tahap'];
       $dataTKKlulus = $this->M_tkkperiode->dataTKK_lulus($kode_tkk_tahap, $status_kelulusan)->result_array();
-      $data['dataTKKaktif'] = $this->M_tkkperiode->dataTKK_aktif($kode_tkk_tahap)->row_array();
       $data = [
-         'dataTKKlulus' => $dataTKKlulus,
-         'dataTKKaktif' => $dataTKKaktif
+         'dataTKKlulus' => $dataTKKlulus
       ];
-      $cekSemesterAkademik = $data['dataTKKaktif']['semester_akademik'];
-      $cekTahapTKK = $data['dataTKKaktif']['tahap_ke'];
 
       $tanggal_expired = $this->input->post('tanggal_expired');
-      
-      foreach ($dataTKKlulus as $key => $item) {
+
+      foreach ($dataTKKlulus as $item) {
          $this->M_tkkperiode->editSertifikat(
             $item['kode_tkk_daftar'],
             [
@@ -399,47 +396,99 @@ class ValidasiTKK extends CI_Controller
          );
       }
 
-      
+      $status_aktif = 1;
+      $status_kelulusan = 'l';
+      $data['TahapAktif'] = $this->M_tkkperiode->ambil_baris_tkk_tahap($status_aktif)->row_array();
+      $kode_tkk_tahap = $data['TahapAktif']['kode_tkk_tahap'];
+      $dataTKKSertifikat = $this->M_tkkperiode->dataTKK_sertifikat($kode_tkk_tahap, $status_kelulusan)->result_array();
+      $dataTKKaktif = $this->M_tkkperiode->dataTKK_aktif($kode_tkk_tahap)->row_array();
+      $cekSemesterAkademik = $data['TahapAktif']['semester_akademik'];
+      $cekTahapTKK = $data['TahapAktif']['tahap_ke'];
+      $data = [
+         'dataTKKaktif' => $dataTKKaktif,
+         'dataTKKSertifikat' => $dataTKKSertifikat
+      ];
       // Proses foreach untuk setiap data
-      foreach ($dataTKKlulus as $item2) {
+      foreach ($dataTKKSertifikat as $key => $item2) {
          // Load template sertifikat
          $templatePath = FCPATH . 'assets/images/Template.png';  // Sesuaikan path template PNG Anda
          $template = imagecreatefrompng($templatePath);
-          // Tambahkan teks atau gambar sesuai dengan data
-         $text = $item2['nama'];
-         $fontPath = FCPATH . 'assets/ttf/Poppin-Regular.ttf';  // Sesuaikan path font TrueType Anda
+         // Tambahkan teks atau gambar sesuai dengan data
+         $textNama = $item2['nama'];
+         $textNIM = $item2['nim'];
+         $textNilaiTKK = $item2['nilai_n1'];
+         $textNoSertifikat = $item2['no_sertifikat'];
+         $textTanggalExpired = date("d F Y", strtotime($item2['tanggal_expired']));
+         $textSemester = $item2['semester'] . ' Tahun Akademik ' . $item2['tahun_akademik'];
+         $fontPath = FCPATH . 'assets/ttf/Poppins-SemiBold.ttf';  // Sesuaikan path font TrueType Anda
+         $fontPathisi = FCPATH . 'assets/ttf/Alatsi-Regular.ttf';  // Sesuaikan path font TrueType Anda
 
-          // Tambahkan teks ke sertifikat
-         imagettftext($template, 30, 0, 100, 200, imagecolorallocate($template, 0, 0, 0), $fontPath, $text);
+         // Data yang akan dijadikan QR Code
 
-          // Simpan sertifikat
+         // Generate QR Code menggunakan library CIQRCode
+         $config['cacheable']    = true; // true jika ingin menyimpan hasil QR Code ke cache
+         $config['cachedir']     = FCPATH . 'application/uploads/sertifikat/cache/'; // Sesuaikan dengan direktori cache yang diinginkan
+         $config['quality']      = true; // true jika ingin kualitas gambar yang lebih baik
+         $config['size']         = '1024x1024'; // Sesuaikan dengan ukuran yang diinginkan
+         $config['black']        = [0, 0, 0]; // Warna hitam untuk QR Code
+         $config['text']         = $item2['no_sertifikat'];
+
+         // Generate QR Code dan simpan ke cache (jika cacheable=true)
+         $this->ciqrcode->initialize($config);
+         $imageURL = $config['cachedir'] . $item2['no_sertifikat'] . 'qr_code.png'; // Sesuaikan dengan path yang diinginkan
+         $url = base_url() . 'Sertifikat/arsip/' . $item2['no_sertifikat'] . '.png';
+         var_dump($url, $imageURL);
+         $this->ciqrcode->generate($url, $imageURL);
+
+         // Baca gambar QR Code sebagai gambar
+         $qrCodeImage = imagecreatefrompng($imageURL);
+
+         // Tentukan posisi dan ukuran QR Code di dalam sertifikat
+         $qrCodeX = 400;
+         $qrCodeY = 800;
+         $qrCodeWidth = imagesx($qrCodeImage);
+         $qrCodeHeight = imagesy($qrCodeImage);
+
+         // Tambahkan teks ke sertifikat
+         imagettftext($template, 70, 0, 150, 500, imagecolorallocate($template, 0, 0, 0), $fontPath, $textNama);
+         imagettftext($template, 70, 0, 150, 620, imagecolorallocate($template, 0, 0, 0), $fontPath, $textNIM);
+         imagettftext($template, 27, 0, 335, 815, imagecolorallocate($template, 0, 0, 0), $fontPathisi, $textSemester);
+         imagettftext($template, 27, 0, 325, 320, imagecolorallocate($template, 0, 0, 0), $fontPathisi, $textNoSertifikat);
+         imagettftext($template, 27, 0, 250, 865, imagecolorallocate($template, 0, 0, 0), $fontPathisi, $textNilaiTKK);
+         imagettftext($template, 27, 0, 775, 915, imagecolorallocate($template, 0, 0, 0), $fontPathisi, $textTanggalExpired);
+         imagecopy($template, $qrCodeImage, $qrCodeX, $qrCodeY, 0, 0, $qrCodeWidth, $qrCodeHeight);
+
+         // Simpan sertifikat
          if (!empty($cekSemesterAkademik)) {
             $dirSemesterAkademik = FCPATH . 'application/uploads/sertifikat/' . $cekSemesterAkademik . '/';
             $this->BuatFolderSemesterAkademik($dirSemesterAkademik);
          }
-         
          if (!empty($cekTahapTKK)) {
             $dirTahapTKK = FCPATH . 'application/uploads/sertifikat/' . $cekSemesterAkademik . '/' . $cekTahapTKK . '/';
             $this->BuatFolderTahapTKK($dirTahapTKK);
          }
-         $file_name = time() . $item2['nim'] . '.png';
-         $outputPath = $dirTahapTKK . $file_name;  // Sesuaikan path output PNG Anda
+         $directory = FCPATH . 'application/uploads/sertifikat/' . $cekSemesterAkademik . '/' . $cekTahapTKK . '/';
+         $file_name = $item2['no_sertifikat'] . '.png';
+         $outputPath = $directory . $file_name;  // Sesuaikan path output PNG Anda
+
+         // Set header untuk menampilkan gambar sebagai respons
+         header('Content-Type: image/png');
          imagepng($template, $outputPath);
 
-          // Hapus teks yang ditambahkan agar siap untuk data berikutnya
-          // Anda dapat mengosongkan sertifikat atau membuat salinan template baru
-          // Sesuai dengan kebutuhan aplikasi Anda
+         // Hapus teks yang ditambahkan agar siap untuk data berikutnya
+         // Anda dapat mengosongkan sertifikat atau membuat salinan template baru
+         // Sesuai dengan kebutuhan aplikasi Anda
          imagealphablending($template, false);
          imagesavealpha($template, true);
          imagefilledrectangle($template, 0, 0, imagesx($template), imagesy($template), imagecolorallocatealpha($template, 0, 0, 0, 127));
+
+         // Hapus sertifikat dari memori
+         imagedestroy($template);
+         imagedestroy($qrCodeImage);
       }
 
-      // Hapus sertifikat dari memori
-      imagedestroy($template);
-
-
       if ($this->db->affected_rows() > 0) {
-         $this->session->set_flashdata('success', 'Data Berhasil Diubah !');
+         $this->session->set_flashdata('success', 'Sertifikat Berhasil Dibuat !');
       }
       redirect('ValidasiTKK');
    }

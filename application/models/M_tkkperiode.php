@@ -111,6 +111,24 @@ class M_tkkperiode extends CI_Model
       }
    }
 
+   public function dataTKK_sertifikat($kode_tkk_tahap, $status_kelulusan)
+   {
+      $this->db->select('*');
+      $this->db->from('view_tkk_daftar');
+      $this->db->where('kode_tkk_tahap', $kode_tkk_tahap);
+      $this->db->where('status_lulus', $status_kelulusan);
+      $this->db->where('no_sertifikat IS NOT NULL');
+      $this->db->order_by('nama', 'ASC');
+      $query = $this->db->get();
+      $result = $query->result();
+
+      if ($result) {
+         return $query;
+      } else {
+         return $query;
+      }
+   }
+
    public function dataTKK_aktifDosen($kode_tkk_tahap)
    {
       $this->db->select('*');
