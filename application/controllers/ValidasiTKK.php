@@ -422,33 +422,7 @@ class ValidasiTKK extends CI_Controller
          $textSemester = $item2['semester'] . ' Tahun Akademik ' . $item2['tahun_akademik'];
          $fontPath = FCPATH . 'assets/ttf/Poppins-SemiBold.ttf';  // Sesuaikan path font TrueType Anda
          $fontPathisi = FCPATH . 'assets/ttf/Alatsi-Regular.ttf';  // Sesuaikan path font TrueType Anda
-
-         // Data yang akan dijadikan QR Code
-
-         // Generate QR Code menggunakan library CIQRCode
-         $config['cacheable']    = true; // true jika ingin menyimpan hasil QR Code ke cache
-         $config['cachedir']     = FCPATH . 'application/uploads/sertifikat/cache/'; // Sesuaikan dengan direktori cache yang diinginkan
-         $config['quality']      = true; // true jika ingin kualitas gambar yang lebih baik
-         $config['size']         = '1024x1024'; // Sesuaikan dengan ukuran yang diinginkan
-         $config['black']        = [0, 0, 0]; // Warna hitam untuk QR Code
-         $config['text']         = $item2['no_sertifikat'];
-
-         // Generate QR Code dan simpan ke cache (jika cacheable=true)
-         $this->ciqrcode->initialize($config);
-         $imageURL = $config['cachedir'] . $item2['no_sertifikat'] . 'qr_code.png'; // Sesuaikan dengan path yang diinginkan
-         $url = base_url() . 'Sertifikat/arsip/' . $item2['no_sertifikat'] . '.png';
-         var_dump($url, $imageURL);
-         $this->ciqrcode->generate($url, $imageURL);
-
-         // Baca gambar QR Code sebagai gambar
-         $qrCodeImage = imagecreatefrompng($imageURL);
-
-         // Tentukan posisi dan ukuran QR Code di dalam sertifikat
-         $qrCodeX = 400;
-         $qrCodeY = 800;
-         $qrCodeWidth = imagesx($qrCodeImage);
-         $qrCodeHeight = imagesy($qrCodeImage);
-
+         
          // Tambahkan teks ke sertifikat
          imagettftext($template, 70, 0, 150, 500, imagecolorallocate($template, 0, 0, 0), $fontPath, $textNama);
          imagettftext($template, 70, 0, 150, 620, imagecolorallocate($template, 0, 0, 0), $fontPath, $textNIM);
@@ -456,7 +430,6 @@ class ValidasiTKK extends CI_Controller
          imagettftext($template, 27, 0, 325, 320, imagecolorallocate($template, 0, 0, 0), $fontPathisi, $textNoSertifikat);
          imagettftext($template, 27, 0, 250, 865, imagecolorallocate($template, 0, 0, 0), $fontPathisi, $textNilaiTKK);
          imagettftext($template, 27, 0, 775, 915, imagecolorallocate($template, 0, 0, 0), $fontPathisi, $textTanggalExpired);
-         imagecopy($template, $qrCodeImage, $qrCodeX, $qrCodeY, 0, 0, $qrCodeWidth, $qrCodeHeight);
 
          // Simpan sertifikat
          if (!empty($cekSemesterAkademik)) {
@@ -484,7 +457,6 @@ class ValidasiTKK extends CI_Controller
 
          // Hapus sertifikat dari memori
          imagedestroy($template);
-         imagedestroy($qrCodeImage);
       }
 
       if ($this->db->affected_rows() > 0) {

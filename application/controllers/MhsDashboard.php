@@ -69,4 +69,15 @@ class MhsDashboard extends CI_Controller
       $this->session->set_flashdata('success', 'Data Berhasil Disinkronkan !');
       redirect('MhsDashboard');
    }
+
+   function arsip()
+   {
+      $data['userMahasiswa'] = $this->session->userdata('userMahasiswa');
+      $nim = $data['userMahasiswa']['nim'];
+      $data['daftarTKK'] = $this->M_mahasiswa->ambil_data_TKK($nim)->result_array();
+      
+      $daftarTKK['no_sertifikat'] = $this->uri->segment(3);
+      header('Content-Type: image/png');
+      readfile('./application/uploads/sertifikat/' . $daftarTKK['semester_akademik'] . '/' . $daftarTKK['tahap_ke'] . '/' . $daftarTKK['no_sertifikat'] . '.png');
+   }
 }

@@ -81,7 +81,11 @@
                                           <h4 class="heading">Tahap ke <?= $data['tahap_ke']; ?> Semester <?= $data['semester']; ?> T.A. <?= $data['tahun_akademik']; ?></h4>
                                           <?php
                                           if ($data['status_lulus'] == 'l') : ?> <!--lulus -->
-                                             <blockquote class="message">Selamat ! Anda telah lulus Tes Keterampilan Keagamaan pada tahap ini. Nilai dari TKK ini berlaku sampai tanggal <?= date("d F Y", strtotime($data['tanggal_expired'])); ?>.</blockquote>
+                                             <blockquote class="message">
+                                                Selamat ! Anda telah lulus Tes Keterampilan Keagamaan pada tahap ini. Nilai dari TKK ini berlaku sampai tanggal <?= date("d F Y", strtotime($data['tanggal_expired'])); ?>. <br>
+                                                <a class="btn btn-success" href="<?= base_url(); ?>application/uploads/sertifikat/<?= $data['semester_akademik'] ?>/<?= $data['tahap_ke'] ?>/<?= $data['no_sertifikat'] ?>.png" method="post" enctype="multipart/form-data" target="_blank"><i class="fa fa-edit m-right-xs"></i> Download Sertifikat</a>
+                                                <!-- <a class="btn btn-success" href="<?= base_url(); ?>Sertifikat/arsip/<?= $data['no_sertifikat'] ?>.png" target="_blank"><i class="fa fa-edit m-right-xs"></i> Download Sertifikat</a> -->
+                                             </blockquote>
                                           <?php elseif ($data['status_lulus'] == 'tl') : ?> <!--tidak lulus -->
                                              <blockquote class="message">Maaf ! Anda belum lulus untuk Tes Keterampilan pada Tahap ke <?= $data['tahap_ke']; ?> Semester <?= $data['semester']; ?> T.A. <?= $data['tahun_akademik']; ?></blockquote>
                                           <?php elseif ($data['status_lulus'] == 'tg') : ?> <!--menunggu -->

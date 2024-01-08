@@ -19,7 +19,7 @@ class Fungsi
     }
 
     function generateRandomString($length = 40) {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
+        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $randomString = '';
     
         for ($i = 0; $i < $length; $i++) {
