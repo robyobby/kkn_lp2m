@@ -22,7 +22,8 @@ class MhsDashboard extends CI_Controller
       $data['mahasiswa'] = $this->M_mahasiswa->ambil_data($nim)->row_array();
       $data['mahasiswaTKK'] = $this->M_tkkperiode->ambil_daftartkk($nim)->row_array();
       $data['daftarTKK'] = $this->M_mahasiswa->ambil_data_TKK($nim)->result_array();
-      // print_r($data['daftarTKK']);
+      // print_r($daftarTKK[0]['tahap_ke']);
+
       $this->template->load('mahasiswa/View_template', 'mahasiswa/View_dashboard', $data);
    }
 
@@ -73,11 +74,14 @@ class MhsDashboard extends CI_Controller
    function arsip()
    {
       $data['userMahasiswa'] = $this->session->userdata('userMahasiswa');
-      $nim = $data['userMahasiswa']['nim'];
-      $data['daftarTKK'] = $this->M_mahasiswa->ambil_data_TKK($nim)->result_array();
-      
-      $daftarTKK['no_sertifikat'] = $this->uri->segment(3);
+      $dataSemester = $this->input->post('semester_akademik');
+      $dataTahapKe = $this->input->post('tahap_ke');
+
+      $name = $this->uri->segment(3);
       header('Content-Type: image/png');
-      readfile('./application/uploads/sertifikat/' . $daftarTKK['semester_akademik'] . '/' . $daftarTKK['tahap_ke'] . '/' . $daftarTKK['no_sertifikat'] . '.png');
+      // foreach ($daftarTKK as $data => $row) {
+      //    readfile('./uploads/sertifikat/' . $dataSemester . '/' . $dataTahapKe . '/' . $name);
+      // }
+      readfile('./uploads/sertifikat/' . $dataSemester . '/' . $dataTahapKe . '/' . $name);
    }
 }

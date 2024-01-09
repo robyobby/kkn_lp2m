@@ -227,7 +227,7 @@
                <div class="clearfix"></div>
             </div>
             <div class="x_content form-horizontal form-label-left">
-               <form action="<?= site_url('ValidasiTKK/BuatSertifikat') ?>" method="POST">
+               <form action="<?= site_url('ValidasiTKK/BuatSertifikatPdf') ?>" method="POST">
                   <div class="item form-group">
                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="lulus">Jumlah Mahasiswa Yang Lulus <span class="required">*</span></label>
                      <div class="col-md-6 col-sm-6 col-xs-12">

@@ -10,8 +10,7 @@ class ValidasiTKK extends CI_Controller
    {
       parent::__construct();
       $this->load->model(['M_mahasiswa', 'M_tkkperiode']);
-      $this->load->library('image_lib');
-      $this->load->library('Ciqrcode');
+      $this->load->library(['image_lib', 'pdf']);
    }
 
    public function index()
@@ -390,7 +389,7 @@ class ValidasiTKK extends CI_Controller
          $this->M_tkkperiode->editSertifikat(
             $item['kode_tkk_daftar'],
             [
-               'no_sertifikat' => $this->fungsi->generateRandomString(40),
+               'no_sertifikat' => $this->fungsi->generateRandomString(40) . '.png',
                'tanggal_expired' => $tanggal_expired
             ]
          );
@@ -409,7 +408,7 @@ class ValidasiTKK extends CI_Controller
          'dataTKKSertifikat' => $dataTKKSertifikat
       ];
       // Proses foreach untuk setiap data
-      foreach ($dataTKKSertifikat as $key => $item2) {
+      foreach ($dataTKKSertifikat as $item2) {
          // Load template sertifikat
          $templatePath = FCPATH . 'assets/images/Template.png';  // Sesuaikan path template PNG Anda
          $template = imagecreatefrompng($templatePath);
@@ -417,12 +416,12 @@ class ValidasiTKK extends CI_Controller
          $textNama = $item2['nama'];
          $textNIM = $item2['nim'];
          $textNilaiTKK = $item2['nilai_n1'];
-         $textNoSertifikat = $item2['no_sertifikat'];
+         $textNoSertifikat = substr($item2['no_sertifikat'], 1, 40);
          $textTanggalExpired = date("d F Y", strtotime($item2['tanggal_expired']));
          $textSemester = $item2['semester'] . ' Tahun Akademik ' . $item2['tahun_akademik'];
          $fontPath = FCPATH . 'assets/ttf/Poppins-SemiBold.ttf';  // Sesuaikan path font TrueType Anda
          $fontPathisi = FCPATH . 'assets/ttf/Alatsi-Regular.ttf';  // Sesuaikan path font TrueType Anda
-         
+
          // Tambahkan teks ke sertifikat
          imagettftext($template, 70, 0, 150, 500, imagecolorallocate($template, 0, 0, 0), $fontPath, $textNama);
          imagettftext($template, 70, 0, 150, 620, imagecolorallocate($template, 0, 0, 0), $fontPath, $textNIM);
@@ -433,15 +432,15 @@ class ValidasiTKK extends CI_Controller
 
          // Simpan sertifikat
          if (!empty($cekSemesterAkademik)) {
-            $dirSemesterAkademik = FCPATH . 'application/uploads/sertifikat/' . $cekSemesterAkademik . '/';
+            $dirSemesterAkademik = FCPATH . '/uploads/sertifikat/' . $cekSemesterAkademik . '/';
             $this->BuatFolderSemesterAkademik($dirSemesterAkademik);
          }
          if (!empty($cekTahapTKK)) {
-            $dirTahapTKK = FCPATH . 'application/uploads/sertifikat/' . $cekSemesterAkademik . '/' . $cekTahapTKK . '/';
+            $dirTahapTKK = FCPATH . '/uploads/sertifikat/' . $cekSemesterAkademik . '/' . $cekTahapTKK . '/';
             $this->BuatFolderTahapTKK($dirTahapTKK);
          }
-         $directory = FCPATH . 'application/uploads/sertifikat/' . $cekSemesterAkademik . '/' . $cekTahapTKK . '/';
-         $file_name = $item2['no_sertifikat'] . '.png';
+         $directory = FCPATH . '/uploads/sertifikat/' . $cekSemesterAkademik . '/' . $cekTahapTKK . '/';
+         $file_name = $item2['no_sertifikat'];
          $outputPath = $directory . $file_name;  // Sesuaikan path output PNG Anda
 
          // Set header untuk menampilkan gambar sebagai respons
@@ -463,5 +462,122 @@ class ValidasiTKK extends CI_Controller
          $this->session->set_flashdata('success', 'Sertifikat Berhasil Dibuat !');
       }
       redirect('ValidasiTKK');
+   }
+
+
+   public function BuatSertifikatPdf()
+   {
+      $status_aktif = 1;
+      $status_kelulusan = 'l';
+      $data['TahapAktif'] = $this->M_tkkperiode->ambil_baris_tkk_tahap($status_aktif)->row_array();
+      $kode_tkk_tahap = $data['TahapAktif']['kode_tkk_tahap'];
+      $dataTKKlulus = $this->M_tkkperiode->dataTKK_lulus($kode_tkk_tahap, $status_kelulusan)->result_array();
+      $data = [
+         'dataTKKlulus' => $dataTKKlulus
+      ];
+
+      $tanggal_expired = $this->input->post('tanggal_expired');
+
+      foreach ($dataTKKlulus as $item) {
+         $this->M_tkkperiode->editSertifikat(
+            $item['kode_tkk_daftar'],
+            [
+               'no_sertifikat' => $this->fungsi->generateRandomString(40) . '.pdf',
+               'tanggal_expired' => $tanggal_expired
+            ]
+         );
+      }
+
+      $this->_generateSertifikat();
+
+      if ($this->db->affected_rows() > 0) {
+         $this->session->set_flashdata('success', 'Sertifikat Berhasil Dibuat !');
+      }
+      redirect('ValidasiTKK');
+   }
+
+   private function _generateSertifikat()
+   {
+      $status_aktif = 1;
+      $status_kelulusan = 'l';
+      $data['TahapAktif'] = $this->M_tkkperiode->ambil_baris_tkk_tahap($status_aktif)->row_array();
+      $kode_tkk_tahap = $data['TahapAktif']['kode_tkk_tahap'];
+      $dataTKKSertifikat = $this->M_tkkperiode->dataTKK_sertifikat($kode_tkk_tahap, $status_kelulusan)->result_array();
+      $dataTKKaktif = $this->M_tkkperiode->dataTKK_aktif($kode_tkk_tahap)->row_array();
+      $cekSemesterAkademik = $data['TahapAktif']['semester_akademik'];
+      $cekTahapTKK = $data['TahapAktif']['tahap_ke'];
+      $data = [
+         'dataTKKaktif' => $dataTKKaktif,
+         'dataTKKSertifikat' => $dataTKKSertifikat
+      ];
+
+      // $this->_addCustomFont();
+
+      // Proses foreach untuk setiap data
+      foreach ($dataTKKSertifikat as $item2) {
+         // Load template sertifikat
+         $templatePath = FCPATH . 'assets/images/Template.png';  // Sesuaikan path template PNG Anda
+         // Tambahkan teks atau gambar sesuai dengan data
+         $textNama = $item2['nama'];
+         $textNIM = $item2['nim'];
+         $textNilaiTKK = $item2['nilai_n1'];
+         $textNoSertifikat = substr($item2['no_sertifikat'], 1, 40);
+         $textTanggalExpired = date("d F Y", strtotime($item2['tanggal_expired']));
+         $textSemester = $item2['semester'] . ' Tahun Akademik ' . $item2['tahun_akademik'];
+
+         // Buat objek PDF
+         $pdf = new TCPDF(); // Ganti dengan FPDF jika Anda menggunakan FPDF
+
+         // Set atribut PDF
+         $pdf->SetCreator($item2['nim'] . '-' . $item2['nama']);
+         $pdf->SetAuthor($item2['nim'] . '-' . $item2['nama']);
+         $pdf->SetTitle('Certificate of Completion');
+         $pdf->SetSubject('Certificate');
+
+         // Tambahkan halaman
+         $pdf->AddPage('L');
+
+         // Tambahkan konten ke PDF
+         // Misalnya, gambar template sertifikat dan isi sesuai dengan data
+         $pdf->Image($templatePath, 5, 5, 297, 210);
+
+         $pdf->SetFont('Helvetica', '', 52);
+         $pdf->SetXY(25, 65);
+         $pdf->Cell(0, 0, $textNama, 0, 1, 'C');
+
+         // $pdf->SetFont('Helvetica', '', 52);
+         // $pdf->SetXY(25, 85);
+         // $pdf->Cell(0, 0, $textNIM, 0, 1, 'C');
+
+         // $pdf->SetFont('Helvetica', '', 17.8);
+         // $pdf->SetXY(48, 50);
+         // $pdf->Cell(0, 0, $textNoSertifikat, 0, 1, 'C');
+
+         // $pdf->SetFont('Helvetica', '', 15.8);
+         // $pdf->SetXY(120, 55);
+         // $pdf->Cell(0, 0, $textSemester, 0, 1, 'C');
+
+         // $pdf->SetFont('Helvetica', '', 15.8);
+         // $pdf->SetXY(128, 40);
+         // $pdf->Cell(0, 0, $textNilaiTKK, 0, 1, 'C');
+
+         // $pdf->SetFont('Helvetica', '', 15.8);
+         // $pdf->SetXY(137, 115);
+         // $pdf->Cell(0, 0, $textTanggalExpired, 0, 1, 'C');
+         // Simpan PDF ke folder atau kirim ke browser
+         $file_name = $item2['no_sertifikat'];
+         // Simpan sertifikat
+         if (!empty($cekSemesterAkademik)) {
+            $dirSemesterAkademik = FCPATH . '/uploads/sertifikat/' . $cekSemesterAkademik . '/';
+            $this->BuatFolderSemesterAkademik($dirSemesterAkademik);
+         }
+         if (!empty($cekTahapTKK)) {
+            $dirTahapTKK = FCPATH . '/uploads/sertifikat/' . $cekSemesterAkademik . '/' . $cekTahapTKK . '/';
+            $this->BuatFolderTahapTKK($dirTahapTKK);
+         }
+         $directory = FCPATH . '/uploads/sertifikat/' . $cekSemesterAkademik . '/' . $cekTahapTKK . '/';
+         $file_path = $directory . $file_name; // Sesuaikan dengan path tujuan penyimpanan
+         $pdf->Output($file_path, 'F');
+      }
    }
 }
